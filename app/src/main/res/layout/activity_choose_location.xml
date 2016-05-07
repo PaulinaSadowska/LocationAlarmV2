@@ -1,78 +1,118 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
-
-        <fragment
-            android:id="@+id/choose_location_place_autocomplete_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-            />
-
-    </FrameLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:textAlignment="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/choose_location_radius_label"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            tools:text="promień"/>
-
-        <EditText
-            android:layout_width="0dp"
-            android:labelFor="@id/choose_location_radius_label"
-            android:inputType="number"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            tools:text="5km"/>
-
-    </LinearLayout>
-
     <fragment
         android:id="@+id/choose_location_map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6"
+        android:layout_height="match_parent"
         tools:context="com.nekodev.paulina.sadowska.locationalarmv2.ChooseLocationActivity" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
 
-        <Button
-            style="@style/Base.Widget.AppCompat.Button.Colored"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            tools:text="ODRZUĆ"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="-8dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:textAlignment="center">
 
-        <Button
-            style="@style/Base.Widget.AppCompat.Button.Colored"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            tools:text="ZAPISZ"/>
+            <TextView
+                android:id="@+id/choose_location_radius_label"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/half_transparent_black"
+                android:fontFamily="sans-serif"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="8dp"
+                android:gravity="start|center_vertical"
+                android:textSize="16sp"
+                android:paddingStart="24dp"
+                android:textColor="@color/white"
+                tools:text="promień" />
+
+                <com.appyvet.rangebar.RangeBar
+                    android:id="@+id/choose_location_radius_seekbar"
+                    xmlns:custom="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="260dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="bottom|end"
+                    custom:tickColor="@color/transparent"
+                    custom:pinMaxFont="14dp"
+                    custom:pinPadding="4dp"
+                    custom:pinRadius="24dp"
+                    custom:rangeBar="false"
+                    custom:tickStart="0"
+                    custom:tickEnd="5000"
+                    custom:tickInterval="50" />
+
+
+            </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary">
+
+            <Button
+                android:id="@+id/save"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:background="@drawable/ripple"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="0dp"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif"
+                android:text="CLOSE"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <Button
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:background="@drawable/ripple"
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif"
+                android:text="SAVE"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 
-</LinearLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_marginEnd="@dimen/search_bar_margin"
+        android:layout_marginStart="@dimen/search_bar_margin"
+        android:layout_marginTop="@dimen/search_bar_margin"
+        android:background="@color/white"
+        app:cardCornerRadius="6dp">
+
+        <fragment
+            android:id="@+id/choose_location_place_autocomplete_fragment"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>
