@@ -34,7 +34,7 @@
                 android:background="@color/half_transparent_black"
                 android:fontFamily="sans-serif"
                 android:layout_gravity="bottom"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="7dp"
                 android:gravity="start|center_vertical"
                 android:textSize="16sp"
                 android:paddingStart="24dp"
@@ -44,7 +44,7 @@
                 <com.appyvet.rangebar.RangeBar
                     android:id="@+id/choose_location_radius_seekbar"
                     xmlns:custom="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="260dp"
+                    android:layout_width="280dp"
                     android:layout_height="100dp"
                     android:layout_gravity="bottom|end"
                     custom:tickColor="@color/transparent"
@@ -66,7 +66,7 @@
             android:background="@color/colorPrimary">
 
             <Button
-                android:id="@+id/save"
+                android:id="@+id/choose_location_cancel"
                 style="@style/Base.Widget.AppCompat.Button.Borderless"
                 android:background="@drawable/ripple"
                 android:layout_width="0dp"
@@ -79,9 +79,9 @@
                 android:textSize="16sp" />
 
             <Button
+                android:id="@+id/choose_location_save"
                 style="@style/Base.Widget.AppCompat.Button.Borderless"
                 android:background="@drawable/ripple"
-
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

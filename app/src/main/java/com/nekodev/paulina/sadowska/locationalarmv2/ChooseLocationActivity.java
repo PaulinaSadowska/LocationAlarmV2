@@ -4,7 +4,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appyvet.rangebar.IRangeBarFormatter;
 import com.appyvet.rangebar.RangeBar;
@@ -23,6 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ChooseLocationActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -40,6 +44,10 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     TextView radiusLabel;
     @Bind(R.id.choose_location_radius_seekbar)
     RangeBar radiusSeekbar;
+    @Bind(R.id.choose_location_save)
+    Button saveButton;
+    @Bind(R.id.choose_location_cancel)
+    Button cancelButton;
 
 
 
@@ -131,5 +139,18 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
                     .strokeColor(STROKE_COLOR)
                     .strokeWidth(STROKE_WIDTH));
         }
+    }
+
+    @OnClick(R.id.choose_location_save)
+    public void saveLocalization(View view) {
+        //start new activity
+        //Intent intent = new Intent(this, ChooseLocationActivity.class);
+        //startActivity(intent);
+        Toast.makeText(this, "SAVE LOCALIZATION AND GO TO DETAILS", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.choose_location_cancel)
+    public void cancelLocalization(View view) {
+        onBackPressed();
     }
 }
