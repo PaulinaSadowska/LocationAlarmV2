@@ -1,8 +1,12 @@
 package com.nekodev.paulina.sadowska.locationalarmv2;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +15,12 @@ import android.widget.Toast;
 
 import com.appyvet.rangebar.IRangeBarFormatter;
 import com.appyvet.rangebar.RangeBar;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
@@ -28,7 +37,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ChooseLocationActivity extends FragmentActivity implements OnMapReadyCallback {
+public class ChooseLocationActivity extends FragmentActivity implements OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private static final float STROKE_WIDTH = (float)1.5;
     private static final int ZOOM = 13;
@@ -36,6 +46,8 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     private static final int STROKE_COLOR = Color.argb(200, 0, 0, 0);
     private GoogleMap mMap;
     private PlaceAutocompleteFragment autocompleteFragment;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
 
     private LatLng placeLatLng;
     private int radius = 1000;
@@ -62,6 +74,7 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
                 getFragmentManager().findFragmentById(R.id.choose_location_place_autocomplete_fragment);
 
         mapFragment.getMapAsync(this);
+        BuildGoogleApiClient();
         configureAutocompleteFragment();
         radiusLabel.setText(getString(R.string.radius_label));
         radiusSeekbar.setRangePinsByValue(0, radius);
@@ -81,6 +94,17 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
                 return s + getString(R.string.radius_unit_label);
             }
         });
+    }
+
+    private void BuildGoogleApiClient() {
+
+        //create GoogleApiClient
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
     }
 
     private void configureAutocompleteFragment() {
@@ -152,5 +176,47 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     @OnClick(R.id.choose_location_cancel)
     public void cancelLocalization(View view) {
         onBackPressed();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //disconnect to GoogleApiClient
+        if(mGoogleApiClient.isConnected())
+            mGoogleApiClient.disconnect();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d(ChooseLocationActivity.class.getName(), "Google Api Client connection failed");
+    }
+
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        placeLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        updateMap(true);
     }
 }

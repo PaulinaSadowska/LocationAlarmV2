@@ -5,7 +5,6 @@ package com.nekodev.paulina.sadowska.locationalarmv2.alarmList;
  */
 public class AlarmDataItem {
 
-    private String label;
     private Boolean isActive;
     private String location;
     private int radiusInMeters;
@@ -24,9 +23,6 @@ public class AlarmDataItem {
         notificationOnly = false;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
@@ -54,10 +50,6 @@ public class AlarmDataItem {
 
     public void setNotificationOnly(Boolean notificationOnly) {
         this.notificationOnly = notificationOnly;
-    }
-
-    public String getLabel() {
-        return label;
     }
 
     public Boolean getIsActive() {
