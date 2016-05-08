@@ -14,12 +14,12 @@
     </style>
 
     <style name="locationDataStyle">
-        <item name="android:textSize">14sp</item>
-        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
 
     <style name="radiusStyle">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 

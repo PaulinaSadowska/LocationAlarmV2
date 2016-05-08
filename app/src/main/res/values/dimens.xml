@@ -3,8 +3,7 @@
     <dimen name="search_bar_margin">8dp</dimen>
     <dimen name="fab_bottom_margin">16dp</dimen>
 
-    <dimen name="list_item_margin_horizontal">10dp</dimen>
-    <dimen name="list_item_margin_vertical">10dp</dimen>
+    <dimen name="list_item_margin">10dp</dimen>
     <dimen name="card_margin_horizontal">10dp</dimen>
     <dimen name="card_margin_vertical">10dp</dimen>
     <dimen name="add_button_bottom_margin">16dp</dimen>

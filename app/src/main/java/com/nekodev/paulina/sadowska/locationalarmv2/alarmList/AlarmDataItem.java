@@ -15,7 +15,6 @@ public class AlarmDataItem {
     private Boolean notificationOnly;
 
     public AlarmDataItem() {
-        label = "";
         isActive = true;
         location = "";
         radiusInMeters = 1000;

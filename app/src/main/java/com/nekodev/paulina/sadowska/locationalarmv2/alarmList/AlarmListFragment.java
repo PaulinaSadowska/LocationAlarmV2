@@ -43,11 +43,17 @@ public class AlarmListFragment extends Fragment {
         ArrayList<AlarmDataItem> mAlarmDataItems;
         mAlarmDataItems = new ArrayList<>();
         AlarmDataItem item = new AlarmDataItem();
-        item.setLabel("SOME ALARM");
         item.setRadiusInMeters(3000);
-        item.setLocation("Paris");
+        item.setNotificationOnly(false);
+        item.setLocation("Piotrowo 2");
         item.setActiveDays("pon, śr, cz, pt");
         mAlarmDataItems.add(item);
+        AlarmDataItem item2 = new AlarmDataItem();
+        item2.setRadiusInMeters(1500);
+        item.setNotificationOnly(true);
+        item2.setLocation("Warszawa Centralna");
+        item2.setActiveDays("zawsze");
+        mAlarmDataItems.add(item2);
         mAlarmListAdapter = new AlarmListItemAdapter(mAlarmDataItems, getActivity());
         mAlarmRecyclerView.setAdapter(mAlarmListAdapter);
     }

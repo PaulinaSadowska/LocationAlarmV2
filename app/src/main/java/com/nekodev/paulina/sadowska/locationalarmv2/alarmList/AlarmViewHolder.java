@@ -16,11 +16,10 @@ import butterknife.ButterKnife;
  */
 public class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-    @Bind(R.id.list_item_label)
-    TextView alarmLabel;
     @Bind(R.id.list_item_switch)
     Switch alarmActiveSwitch;
     @Bind(R.id.list_item_localization)  TextView alarmLocalization;
+    @Bind(R.id.list_item_notification_type)  TextView alarmNotificationType;
     @Bind(R.id.list_item_radius)        TextView alarmRadius;
     @Bind(R.id.list_item_active_days)   TextView alarmDays;
 
@@ -33,11 +32,14 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnC
     }
 
     public void bindViewHolder(AlarmDataItem mDataItem) {
-        alarmLabel.setText(mDataItem.getLabel());
         alarmActiveSwitch.setChecked(mDataItem.getIsActive());
         alarmLocalization.setText(mDataItem.getLocation());
-        alarmRadius.setText(mDataItem.getRadiusInKilometers()+"");
+        alarmRadius.setText(" + " + mDataItem.getRadiusInKilometers() + "km");
         alarmDays.setText(mDataItem.getActiveDays());
+        if(mDataItem.getNotificationOnly())
+            alarmNotificationType.setText("powiadomienie");
+        else
+            alarmNotificationType.setText("dzwięk");
     }
 
     public AlarmDataItem getAlarmData() {

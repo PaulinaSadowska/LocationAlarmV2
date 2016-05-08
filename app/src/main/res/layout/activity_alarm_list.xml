@@ -12,6 +12,7 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/alarm_list_add_alarm_button"
+        android:background="@drawable/list_item_ripple"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
