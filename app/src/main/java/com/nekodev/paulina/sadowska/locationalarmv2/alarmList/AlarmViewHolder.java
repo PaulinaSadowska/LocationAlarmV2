@@ -2,6 +2,7 @@ package com.nekodev.paulina.sadowska.locationalarmv2.alarmList;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -16,6 +17,8 @@ import butterknife.ButterKnife;
  */
 public class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+    @Bind(R.id.list_item_delete)
+    ImageView deleteButton;
     @Bind(R.id.list_item_switch)
     Switch alarmActiveSwitch;
     @Bind(R.id.list_item_localization)  TextView alarmLocalization;
@@ -53,6 +56,10 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     public Switch getIsActiveSwitch() {
         return alarmActiveSwitch;
+    }
+
+    public ImageView getDeleteButton() {
+        return deleteButton;
     }
 
     /* Interface for handling clicks - both normal and long ones. */

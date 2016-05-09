@@ -129,7 +129,7 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        placeLatLng = new LatLng(-34, 151);
+        placeLatLng = new LatLng(52.4034891, 16.946969);
         updateMap(true);
     }
 
@@ -170,7 +170,7 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
         //start new activity
         //Intent intent = new Intent(this, ChooseLocationActivity.class);
         //startActivity(intent);
-        Toast.makeText(this, "SAVE LOCALIZATION AND GO TO DETAILS", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "save", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.choose_location_cancel)
@@ -181,12 +181,15 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     @Override
     public void onConnected(Bundle bundle) {
         mLocationRequest = LocationRequest.create();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
         {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
+
+
+
     }
 
     @Override
@@ -218,5 +221,11 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     public void onLocationChanged(Location location) {
         placeLatLng = new LatLng(location.getLatitude(), location.getLongitude());
         updateMap(true);
+        stopLocationUpdates();
+    }
+
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                mGoogleApiClient, this);
     }
 }

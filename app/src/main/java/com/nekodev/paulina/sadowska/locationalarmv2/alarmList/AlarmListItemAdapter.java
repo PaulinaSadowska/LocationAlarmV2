@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -64,9 +65,19 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     mAlarmDataItems.get(position).setIsActive(isChecked);
+                    notifyItemChanged(position);
                 }
             });
         }
+        ImageView deleteButton = holder.getDeleteButton();
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlarmDataItems.remove(position);
+                notifyItemChanged(position);
+            }
+        });
+
     }
 
     @Override
