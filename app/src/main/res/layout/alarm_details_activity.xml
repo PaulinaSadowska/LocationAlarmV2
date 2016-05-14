@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true">
 
     <android.support.v7.widget.Toolbar
@@ -17,10 +18,11 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/alarm_details_map_preview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/maps_dummy" />
+                tools:src="@drawable/maps_dummy" />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -28,34 +30,38 @@
                 android:background="@drawable/gradient_shadow" />
 
             <TextView
+                style="@style/AlarmDetailsTitle"
+                android:id="@+id/alarm_details_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="@dimen/alarm_details_title_bottom_margin"
                 android:layout_marginStart="@dimen/alarm_details_horizontal_margin"
-                style="@style/AlarmDetailsTitle"
-                android:text="Góralska 2, Poznań" />
+                tools:text="Góralska 2, Poznań" />
         </FrameLayout>
 
     </android.support.v7.widget.Toolbar>
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/alarm_details_edit_location_button"
         android:layout_width="@dimen/fab_diameter"
         android:layout_height="@dimen/fab_diameter"
         android:layout_alignParentEnd="true"
         android:layout_below="@id/alarm_details_toolbar"
         android:layout_marginEnd="@dimen/alarm_details_horizontal_margin"
         android:layout_marginTop="@dimen/fab_overflow_margin"
-        android:src="@drawable/ic_mode_edit_white_24dp" />
+        android:scaleType="center"
+        android:src="@drawable/ic_edit_location_white_24dp" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/alarm_details_toolbar">
+
         <FrameLayout
             android:id="@+id/alarm_details_fragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </ScrollView>
 
 </RelativeLayout>
