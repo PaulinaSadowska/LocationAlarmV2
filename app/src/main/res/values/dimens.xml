@@ -8,4 +8,11 @@
     <dimen name="card_margin_vertical">10dp</dimen>
     <dimen name="add_button_bottom_margin">16dp</dimen>
     <dimen name="card_corner_radius">6dp</dimen>
+    <dimen name="toolbar_height">220dp</dimen>
+
+    <dimen name="alarm_details_horizontal_margin">16dp</dimen>
+    <dimen name="alarm_details_title_bottom_margin">6dp</dimen>
+
+    <dimen name="fab_diameter">56dp</dimen>
+    <dimen name="fab_overflow_margin">-28dp</dimen>
 </resources>
