@@ -57,4 +57,11 @@ public class AlarmDetailsItem extends Fragment{
         this.option.setText(itemOption);
         return view;
     }
+
+    public void setOptionText(String optionText){
+        this.itemOption = optionText;
+        if(this.option!=null){
+            this.option.setText(optionText);
+        }
+    }
 }

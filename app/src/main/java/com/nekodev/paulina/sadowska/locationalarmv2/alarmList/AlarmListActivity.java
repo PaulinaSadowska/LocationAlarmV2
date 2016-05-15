@@ -6,7 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.nekodev.paulina.sadowska.locationalarmv2.AlarmDetailsActivity;
+import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmDetailsActivity;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 
 import butterknife.Bind;

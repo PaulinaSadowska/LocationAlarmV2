@@ -1,7 +1,10 @@
-package com.nekodev.paulina.sadowska.locationalarmv2;
+package com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -10,8 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmDetailsItem;
-import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
+import com.nekodev.paulina.sadowska.locationalarmv2.Keys;
+import com.nekodev.paulina.sadowska.locationalarmv2.R;
 
 /**
  * Created by Paulina Sadowska on 15.05.2016.
@@ -19,6 +22,7 @@ import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
 public class AlarmDetailsFragment extends Fragment {
 
 
+    private static final int SELECT_SOUND_REQUEST_CODE = 999;
     private AlarmDetailsItem alarmTypeFragment = new AlarmDetailsItem();
     private AlarmDetailsItem alarmSoundFragment = new AlarmDetailsItem();
     private AlarmDetailsItem alarmRepeatingFragment = new AlarmDetailsItem();
@@ -72,7 +76,9 @@ public class AlarmDetailsFragment extends Fragment {
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, soundTypes);
-        getActivity().startActivityForResult(intent,999);
+        Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+        RingtoneManager.setActualDefaultRingtoneUri(getActivity(), RingtoneManager.TYPE_RINGTONE, uri);
+        getActivity().startActivityForResult(intent,SELECT_SOUND_REQUEST_CODE);
     }
 
     private Bundle getAlarmArg(String title, String option){
@@ -82,4 +88,19 @@ public class AlarmDetailsFragment extends Fragment {
         return args;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+       // super.onActivityResult(requestCode, resultCode, intent);
+        switch(requestCode){
+            case SELECT_SOUND_REQUEST_CODE:
+                if(resultCode== Activity.RESULT_OK) {
+                    Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                    if (uri != null) {
+                        Ringtone ringtone = RingtoneManager.getRingtone(getActivity(), uri);
+                        alarmSoundFragment.setOptionText(ringtone.getTitle(getActivity()));
+                    }
+                }
+                break;
+        }
+    }
 }
