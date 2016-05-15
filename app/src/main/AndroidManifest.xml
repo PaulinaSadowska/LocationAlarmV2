@@ -52,6 +52,11 @@
             android:name=".ChooseLocationActivity"
             android:label="@string/title_activity_choose_location">
         </activity>
+
+        <activity android:name=".alarmDetails.SelectRepeatDaysActivity"
+            android:label="@string/repeat_weekly_title"
+            android:theme="@style/AlarmDialogTheme">
+        </activity>
     </application>
 
 </manifest>

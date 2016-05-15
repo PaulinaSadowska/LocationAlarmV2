@@ -1,18 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     android:orientation="vertical">
 
-    <CheckBox
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="always" />
 
     <CheckBox
-        android:layout_width="match_parent"
+        android:id="@+id/repeat_days_every"
+        style="@style/repeatCheckboxStyle"
+        android:text="@string/day_every" />
+
+    <CheckBox
+        android:id="@+id/repeat_days_monday"
+        style="@style/repeatCheckboxStyle"
+        android:text="@string/day_monday" />
+
+    <CheckBox
+        android:id="@+id/repeat_days_tuesday"
+        style="@style/repeatCheckboxStyle"
+        android:text="@string/day_tuesday" />
+
+    <CheckBox
+        android:id="@+id/repeat_days_wednesday"
+        style="@style/repeatCheckboxStyle"
+        android:text="@string/day_wednesday" />
+
+    <CheckBox
+        android:id="@+id/repeat_days_thursday"
+        style="@style/repeatCheckboxStyle"
+        android:text="@string/day_thursday" />
+
+    <CheckBox
+        android:id="@+id/repeat_days_friday"
+        style="@style/repeatCheckboxStyle"
+        android:text="@string/day_friday" />
+
+    <CheckBox
+        android:id="@+id/repeat_days_saturday"
+        style="@style/repeatCheckboxStyle"
+        android:text="@string/day_saturday"  />
+
+    <CheckBox
+        android:id="@+id/repeat_days_sunday"
+        style="@style/repeatCheckboxStyle"
+        android:text="@string/day_sunday" />
+
+
+    <Button
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:textColor="@color/colorAccent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="never" />
+        android:layout_gravity="end"
+        android:padding="10dp"
+        android:text="SAVE"/>
 
 </LinearLayout>

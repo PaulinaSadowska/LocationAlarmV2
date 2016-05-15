@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.nekodev.paulina.sadowska.locationalarmv2.Keys;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
@@ -59,7 +58,8 @@ public class AlarmDetailsFragment extends Fragment {
         alarmRepeatingFragment.setOnItemClickedListener(new AlarmDetailsItem.ItemClickedListener() {
             @Override
             public void onItemClicked() {
-                Toast.makeText(getActivity(), "start choose days dialog", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), SelectRepeatDaysActivity.class);
+                getActivity().startActivity(intent);
             }
         });
     }
