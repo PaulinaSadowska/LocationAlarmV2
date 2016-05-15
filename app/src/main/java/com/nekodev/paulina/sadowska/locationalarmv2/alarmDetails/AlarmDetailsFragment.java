@@ -23,7 +23,7 @@ public class AlarmDetailsFragment extends Fragment {
 
 
     private static final int SELECT_SOUND_REQUEST_CODE = 999;
-    private AlarmDetailsItem alarmTypeFragment = new AlarmDetailsItem();
+    private AlarmDetailsItemSpinner alarmTypeFragment = new AlarmDetailsItemSpinner();
     private AlarmDetailsItem alarmSoundFragment = new AlarmDetailsItem();
     private AlarmDetailsItem alarmRepeatingFragment = new AlarmDetailsItem();
     private AlarmTypes alarmType = AlarmTypes.SOUND;
@@ -44,13 +44,7 @@ public class AlarmDetailsFragment extends Fragment {
         transaction.replace(R.id.alarm_details_alarm_repeating, alarmRepeatingFragment);
         transaction.commit();
 
-        alarmTypeFragment.setArguments(getAlarmArg("Alarm type:", "Sound"));
-        alarmTypeFragment.setOnItemClickedListener(new AlarmDetailsItem.ItemClickedListener() {
-            @Override
-            public void onItemClicked() {
-                Toast.makeText(getActivity(), "start alarm type choose dialog", Toast.LENGTH_SHORT).show();
-            }
-        });
+        alarmTypeFragment.setArguments(getAlarmTypeArg("Alarm type", new String[]{"Sound", "Notification"}));
         alarmSoundFragment.setArguments(getAlarmArg("Alarm tone:", "Morning Flower"));
         alarmSoundFragment.setOnItemClickedListener(new AlarmDetailsItem.ItemClickedListener() {
             @Override
@@ -102,5 +96,12 @@ public class AlarmDetailsFragment extends Fragment {
                 }
                 break;
         }
+    }
+
+    public Bundle getAlarmTypeArg(String title, String[] options) {
+        Bundle args = new Bundle();
+        args.putString(Keys.AlarmDetailsItemKeys.ITEM_TITLE_KEY, title);
+        args.putSerializable(Keys.AlarmDetailsItemKeys.ITEM_OPTION_KEY, options);
+        return args;
     }
 }

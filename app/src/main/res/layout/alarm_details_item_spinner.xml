@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:background="@drawable/list_item_ripple"
     android:orientation="horizontal"
     android:paddingEnd="24dp"
     android:paddingStart="24dp">
@@ -18,7 +17,7 @@
         android:textSize="16sp"
         tools:text="Alarm type: " />
 
-    <TextView
+    <Spinner
         android:id="@+id/alarm_details_item_option"
         android:layout_width="0dp"
         android:layout_height="match_parent"
