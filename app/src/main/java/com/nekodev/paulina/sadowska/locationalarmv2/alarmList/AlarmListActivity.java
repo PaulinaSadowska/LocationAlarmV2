@@ -6,7 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmDetailsActivity;
+import com.nekodev.paulina.sadowska.locationalarmv2.ChooseLocationActivity;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 
 import butterknife.Bind;
@@ -30,7 +30,7 @@ public class AlarmListActivity extends AppCompatActivity {
 
     @OnClick(R.id.alarm_list_add_alarm_button)
     public void addAlarm(View view) {
-        Intent intent = new Intent(this, AlarmDetailsActivity.class);
+        Intent intent = new Intent(this, ChooseLocationActivity.class);
         startActivity(intent);
     }
 }

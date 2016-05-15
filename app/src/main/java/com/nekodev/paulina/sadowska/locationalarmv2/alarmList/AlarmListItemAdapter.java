@@ -1,6 +1,7 @@
 package com.nekodev.paulina.sadowska.locationalarmv2.alarmList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
+import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmDetailsActivity;
 
 import java.util.ArrayList;
 
@@ -54,8 +55,8 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
         holder.setClickListener(new AlarmViewHolder.ClickListener() {
             @Override
             public void onClick(View v, int pos, boolean isLongClick) {
-                //showAlarmDetails(pos);
-                Toast.makeText(mActivity, "CLICKED", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mActivity, AlarmDetailsActivity.class);
+                mActivity.startActivity(intent);
             }
         });
 

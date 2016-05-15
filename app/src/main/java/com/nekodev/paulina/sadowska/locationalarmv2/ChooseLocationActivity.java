@@ -1,7 +1,9 @@
 package com.nekodev.paulina.sadowska.locationalarmv2;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -11,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.appyvet.rangebar.IRangeBarFormatter;
 import com.appyvet.rangebar.RangeBar;
@@ -32,6 +33,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmDetailsActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,7 +42,7 @@ import butterknife.OnClick;
 public class ChooseLocationActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private static final float STROKE_WIDTH = (float)1.5;
+    private static final float STROKE_WIDTH = (float) 1.5;
     private static final int ZOOM = 13;
     private static final int FILL_COLOR = Color.argb(60, 0, 0, 0);
     private static final int STROKE_COLOR = Color.argb(200, 0, 0, 0);
@@ -62,12 +64,16 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     Button cancelButton;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_location);
         ButterKnife.bind(this);
+        
+        Resources res = getResources();
+        saveButton.setText(res.getString(R.string.save));
+        cancelButton.setText(res.getString(R.string.cancel));
+
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.choose_location_map);
         autocompleteFragment = (PlaceAutocompleteFragment)
@@ -133,15 +139,15 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
         updateMap(true);
     }
 
-    private void updateMap(boolean animate){
-        if(mMap==null){
+    private void updateMap(boolean animate) {
+        if (mMap == null) {
             return;
         }
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(placeLatLng));
-        if(radius>0)
+        if (radius > 0)
             addMarkerWithCircle();
-        if(animate){
+        if (animate) {
             moveCameraToPosition();
         }
     }
@@ -155,7 +161,7 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     }
 
     private void addMarkerWithCircle() {
-        if(radius>0){
+        if (radius > 0) {
             mMap.addCircle(new CircleOptions()
                     .center(placeLatLng)
                     .radius(radius)
@@ -167,10 +173,8 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
 
     @OnClick(R.id.choose_location_save)
     public void saveLocalization(View view) {
-        //start new activity
-        //Intent intent = new Intent(this, ChooseLocationActivity.class);
-        //startActivity(intent);
-        Toast.makeText(this, "save", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, AlarmDetailsActivity.class);
+        startActivity(intent);
     }
 
     @OnClick(R.id.choose_location_cancel)
@@ -183,11 +187,9 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-        {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
-
 
 
     }
@@ -202,7 +204,7 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     protected void onStop() {
         super.onStop();
         //disconnect to GoogleApiClient
-        if(mGoogleApiClient.isConnected())
+        if (mGoogleApiClient.isConnected())
             mGoogleApiClient.disconnect();
     }
 

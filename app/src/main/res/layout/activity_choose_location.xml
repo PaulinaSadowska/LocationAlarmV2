@@ -21,8 +21,8 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="-8dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="horizontal"
             android:textAlignment="center">
@@ -31,67 +31,65 @@
                 android:id="@+id/choose_location_radius_label"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@color/half_transparent_black"
-                android:fontFamily="sans-serif"
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="7dp"
+                android:background="@color/half_transparent_black"
+                android:fontFamily="sans-serif"
                 android:gravity="start|center_vertical"
-                android:textSize="16sp"
                 android:paddingStart="24dp"
                 android:textColor="@color/white"
+                android:textSize="16sp"
                 tools:text="promień" />
 
-                <com.appyvet.rangebar.RangeBar
-                    android:id="@+id/choose_location_radius_seekbar"
-                    xmlns:custom="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="280dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="bottom|end"
-                    custom:tickColor="@color/transparent"
-                    custom:pinMaxFont="14dp"
-                    custom:pinPadding="4dp"
-                    custom:pinRadius="24dp"
-                    custom:rangeBar="false"
-                    custom:tickStart="0"
-                    custom:tickEnd="5000"
-                    custom:tickInterval="50" />
+            <com.appyvet.rangebar.RangeBar xmlns:custom="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/choose_location_radius_seekbar"
+                android:layout_width="280dp"
+                android:layout_height="100dp"
+                android:layout_gravity="bottom|end"
+                custom:pinMaxFont="14dp"
+                custom:pinPadding="4dp"
+                custom:pinRadius="24dp"
+                custom:rangeBar="false"
+                custom:tickColor="@color/transparent"
+                custom:tickEnd="5000"
+                custom:tickInterval="50"
+                custom:tickStart="0" />
 
 
-            </FrameLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:background="@color/colorPrimary">
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/choose_location_cancel"
                 style="@style/Base.Widget.AppCompat.Button.Borderless"
-                android:background="@drawable/ripple"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="0dp"
                 android:layout_weight="1"
+                android:background="@drawable/ripple"
                 android:fontFamily="sans-serif"
-                android:text="CLOSE"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:text="CLOSE" />
 
             <Button
                 android:id="@+id/choose_location_save"
                 style="@style/Base.Widget.AppCompat.Button.Borderless"
-                android:background="@drawable/ripple"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/ripple"
                 android:fontFamily="sans-serif"
-                android:text="SAVE"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:text="SAVE" />
 
         </LinearLayout>
-
 
 
     </LinearLayout>

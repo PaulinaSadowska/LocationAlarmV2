@@ -1,14 +1,18 @@
 package com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nekodev.paulina.sadowska.locationalarmv2.ChooseLocationActivity;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
+import com.nekodev.paulina.sadowska.locationalarmv2.alarmList.AlarmListActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,6 +27,10 @@ public class AlarmDetailsActivity extends AppCompatActivity {
     TextView alarmTitle;
     @Bind(R.id.alarm_details_map_preview)
     ImageView mapPreview;
+    @Bind(R.id.alarm_details_save)
+    Button saveButton;
+    @Bind(R.id.alarm_details_cancel)
+    Button cancelButton;
 
     private AlarmDetailsFragment alarmDetailsFragment = new AlarmDetailsFragment();
 
@@ -35,10 +43,25 @@ public class AlarmDetailsActivity extends AppCompatActivity {
         alarmTitle.setText("Piotrowo 2, Poznań");
         mapPreview.setImageResource(R.drawable.maps_dummy);
 
+        Resources res = getResources();
+        saveButton.setText(res.getString(R.string.save));
+        cancelButton.setText(res.getString(R.string.cancel));
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.alarm_details_fragment, alarmDetailsFragment);
         transaction.commit();
 
+    }
+
+    @OnClick(R.id.alarm_details_save)
+    public void saveLocalization(View view) {
+        Intent intent = new Intent(this, AlarmListActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.alarm_details_cancel)
+    public void cancelLocalization(View view) {
+        onBackPressed();
     }
 
     @OnClick (R.id.alarm_details_edit_location_button)

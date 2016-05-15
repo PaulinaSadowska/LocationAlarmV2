@@ -14,18 +14,12 @@
     <string name="day_sunday">Sunday</string>
     <string name="day_every">Everyday</string>
 
-    <string-array
-        name="days_short_names">
-        <item>Mon</item>
-        <item>Tue</item>
-        <item>Wed</item>
-        <item>Thu</item>
-        <item>Fri</item>
-        <item>Sat</item>
-        <item>Sun</item>
-    </string-array>
-
     <string name="repeat_weekly_title">Repeat weekly</string>
     <string name="day_none">Never</string>
+    <string name="alarm_type">Alarm type:</string>
+    <string name="alarm_tone">Alarm Tone:</string>
+    <string name="select_ringtone">Select ringtone for notifications:</string>
+    <string name="save">SAVE</string>
+    <string name="cancel">CANCEL</string>
 
 </resources>

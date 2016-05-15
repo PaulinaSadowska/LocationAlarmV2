@@ -42,18 +42,21 @@ public class AlarmDetailsFragment extends Fragment {
         transaction.replace(R.id.alarm_details_alarm_repeating, alarmRepeatingFragment);
         transaction.commit();
 
-        alarmTypeFragment.setArguments(getAlarmTypeArg("Alarm type", new String[]{"Sound", "Notification"}));
-        alarmSoundFragment.setArguments(getAlarmArg("Alarm tone:", "Morning Flower"));
+        Resources res = getResources();
+
+        alarmTypeFragment.setArguments(getAlarmTypeArg(res.getString(R.string.alarm_type), res.getStringArray(R.array.alarm_types_list)));
+        alarmSoundFragment.setArguments(getAlarmArg(res.getString(R.string.alarm_tone), "Morning Flower"));
         alarmSoundFragment.setOnItemClickedListener(new AlarmDetailsItem.ItemClickedListener() {
             @Override
             public void onItemClicked() {
+                //TODO - set alarm type
                 if(alarmType==AlarmTypes.SOUND)
                     startSoundPickerActivity(RingtoneManager.TYPE_ALARM);
                 else if(alarmType == AlarmTypes.NOTIFICATION)
                     startSoundPickerActivity(RingtoneManager.TYPE_NOTIFICATION);
             }
         });
-        alarmRepeatingFragment.setArguments(getAlarmArg("Repeat weekly:", "Mon, Wed, Sat, Sun"));
+        alarmRepeatingFragment.setArguments(getAlarmArg(res.getString(R.string.repeat_weekly_title) + ":", res.getString(R.string.day_none)));
         alarmRepeatingFragment.setOnItemClickedListener(new AlarmDetailsItem.ItemClickedListener() {
             @Override
             public void onItemClicked() {
@@ -65,7 +68,7 @@ public class AlarmDetailsFragment extends Fragment {
 
     private void startSoundPickerActivity(int soundTypes) {
         Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select ringtone for notifications:");
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getResources().getString(R.string.select_ringtone));
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, soundTypes);
