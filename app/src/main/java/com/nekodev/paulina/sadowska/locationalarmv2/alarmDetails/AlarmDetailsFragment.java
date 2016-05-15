@@ -2,6 +2,7 @@ package com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -20,8 +21,6 @@ import com.nekodev.paulina.sadowska.locationalarmv2.R;
  */
 public class AlarmDetailsFragment extends Fragment {
 
-
-    private static final int SELECT_SOUND_REQUEST_CODE = 999;
     private AlarmDetailsItemSpinner alarmTypeFragment = new AlarmDetailsItemSpinner();
     private AlarmDetailsItem alarmSoundFragment = new AlarmDetailsItem();
     private AlarmDetailsItem alarmRepeatingFragment = new AlarmDetailsItem();
@@ -59,7 +58,7 @@ public class AlarmDetailsFragment extends Fragment {
             @Override
             public void onItemClicked() {
                 Intent intent = new Intent(getActivity(), SelectRepeatDaysActivity.class);
-                getActivity().startActivity(intent);
+                getActivity().startActivityForResult(intent, Keys.ActivityResultKeys.SELECT_DAYS_REQUEST_CODE);
             }
         });
     }
@@ -72,7 +71,7 @@ public class AlarmDetailsFragment extends Fragment {
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, soundTypes);
         Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
         RingtoneManager.setActualDefaultRingtoneUri(getActivity(), RingtoneManager.TYPE_RINGTONE, uri);
-        getActivity().startActivityForResult(intent,SELECT_SOUND_REQUEST_CODE);
+        getActivity().startActivityForResult(intent, Keys.ActivityResultKeys.SELECT_SOUND_REQUEST_CODE);
     }
 
     private Bundle getAlarmArg(String title, String option){
@@ -86,7 +85,7 @@ public class AlarmDetailsFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
        // super.onActivityResult(requestCode, resultCode, intent);
         switch(requestCode){
-            case SELECT_SOUND_REQUEST_CODE:
+            case Keys.ActivityResultKeys.SELECT_SOUND_REQUEST_CODE:
                 if(resultCode== Activity.RESULT_OK) {
                     Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                     if (uri != null) {
@@ -95,6 +94,15 @@ public class AlarmDetailsFragment extends Fragment {
                     }
                 }
                 break;
+            case Keys.ActivityResultKeys.SELECT_DAYS_REQUEST_CODE:
+                if(resultCode== Activity.RESULT_OK) {
+                    boolean[] result = intent.getBooleanArrayExtra(Keys.REPEAT_DAYS_KEY);
+                    if(result!=null && result.length>0) {
+                        setActiveDays(result);
+                    }
+                }
+                break;
+
         }
     }
 
@@ -103,5 +111,30 @@ public class AlarmDetailsFragment extends Fragment {
         args.putString(Keys.AlarmDetailsItemKeys.ITEM_TITLE_KEY, title);
         args.putSerializable(Keys.AlarmDetailsItemKeys.ITEM_OPTION_KEY, options);
         return args;
+    }
+
+    public void setActiveDays(boolean[] activeDays) {
+        String result = "";
+        Resources res = getResources();
+        String[] daysShortNames = res.getStringArray(R.array.days_short_names);
+        int activeCount = 0;
+        for (int i = 0; i < activeDays.length; i++) {
+            if(activeDays[i]){
+                result += daysShortNames[i]+", ";
+                activeCount++;
+            }
+        }
+        if(activeCount == activeDays.length){
+            alarmRepeatingFragment.setOptionText(res.getString(R.string.day_every));
+        }
+        else {
+            if (result.length() > 0) {
+                result = result.substring(0, result.length() - 2);
+            }
+            else{
+                result = res.getString(R.string.day_none);
+            }
+            alarmRepeatingFragment.setOptionText(result);
+        }
     }
 }

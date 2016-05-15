@@ -14,13 +14,18 @@
     <string name="day_sunday">Sunday</string>
     <string name="day_every">Everyday</string>
 
-    <string name="day_monday_short">Mon</string>
-    <string name="day_tuesday_short">Tue</string>
-    <string name="day_wednesday_short">Wed</string>
-    <string name="day_thursday_short">Thu</string>
-    <string name="day_friday_short">Fri</string>
-    <string name="day_saturday_short">Sat</string>
-    <string name="day_sunday_short">Sun</string>
+    <string-array
+        name="days_short_names">
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
+    </string-array>
+
     <string name="repeat_weekly_title">Repeat weekly</string>
+    <string name="day_none">Never</string>
 
 </resources>
