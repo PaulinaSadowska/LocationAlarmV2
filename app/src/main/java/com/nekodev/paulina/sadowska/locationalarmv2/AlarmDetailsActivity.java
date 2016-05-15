@@ -2,7 +2,6 @@ package com.nekodev.paulina.sadowska.locationalarmv2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
@@ -33,7 +32,6 @@ public class AlarmDetailsActivity extends AppCompatActivity {
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.alarm_details_fragment, new AlarmDetailsFragment());
-
         transaction.commit();
 
     }

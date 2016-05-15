@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
-    <include
+    <FrameLayout
         android:id="@+id/alarm_details_alarm_type"
-        layout="@layout/alarm_details_item"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 
-    <include
+    <FrameLayout
         android:id="@+id/alarm_details_alarm_sound"
-        layout="@layout/alarm_details_item"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-    <include
-        android:id="@+id/alarm_details_repeating"
-        layout="@layout/alarm_details_item"/>
+    <FrameLayout
+        android:id="@+id/alarm_details_alarm_repeating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 
 </LinearLayout>
