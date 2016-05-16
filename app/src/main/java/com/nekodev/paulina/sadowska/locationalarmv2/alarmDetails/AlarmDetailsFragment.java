@@ -48,15 +48,25 @@ public class AlarmDetailsFragment extends Fragment {
         alarmTypeFragment.setOnSpinnerSelectionChangedListener(new AlarmDetailsItemSpinner.SpinnerSelectionChangedListener() {
             @Override
             public void onSpinnerSelectionChanged(int position) {
+                Uri defaultRingtoneUri;
                 if(position==0) { //TODO - alarm type indexes hardcoded - uglyyy!
                     alarmType = AlarmTypes.SOUND;
+                    defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
+
                 }
                 else{
                     alarmType = AlarmTypes.NOTIFICATION;
+                    defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_NOTIFICATION);
                 }
+                Ringtone defaultRingtone = RingtoneManager.getRingtone(getActivity(), defaultRingtoneUri);
+                alarmSoundFragment.setOptionText(defaultRingtone.getTitle(getActivity()));
             }
         });
-        alarmSoundFragment.setArguments(getAlarmArg(res.getString(R.string.alarm_tone), "Morning Flower"));
+
+        Uri defaultRintoneUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
+        Ringtone defaultRingtone = RingtoneManager.getRingtone(getActivity(), defaultRintoneUri);
+
+        alarmSoundFragment.setArguments(getAlarmArg(res.getString(R.string.alarm_tone), defaultRingtone.getTitle(getActivity())));
         alarmSoundFragment.setOnItemClickedListener(new AlarmDetailsItem.ItemClickedListener() {
             @Override
             public void onItemClicked() {
