@@ -45,11 +45,21 @@ public class AlarmDetailsFragment extends Fragment {
         Resources res = getResources();
 
         alarmTypeFragment.setArguments(getAlarmTypeArg(res.getString(R.string.alarm_type), res.getStringArray(R.array.alarm_types_list)));
+        alarmTypeFragment.setOnSpinnerSelectionChangedListener(new AlarmDetailsItemSpinner.SpinnerSelectionChangedListener() {
+            @Override
+            public void onSpinnerSelectionChanged(int position) {
+                if(position==0) { //TODO - alarm type indexes hardcoded - uglyyy!
+                    alarmType = AlarmTypes.SOUND;
+                }
+                else{
+                    alarmType = AlarmTypes.NOTIFICATION;
+                }
+            }
+        });
         alarmSoundFragment.setArguments(getAlarmArg(res.getString(R.string.alarm_tone), "Morning Flower"));
         alarmSoundFragment.setOnItemClickedListener(new AlarmDetailsItem.ItemClickedListener() {
             @Override
             public void onItemClicked() {
-                //TODO - set alarm type
                 if(alarmType==AlarmTypes.SOUND)
                     startSoundPickerActivity(RingtoneManager.TYPE_ALARM);
                 else if(alarmType == AlarmTypes.NOTIFICATION)

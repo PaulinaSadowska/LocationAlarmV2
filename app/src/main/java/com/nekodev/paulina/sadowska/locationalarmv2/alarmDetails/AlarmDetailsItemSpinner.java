@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,16 +27,17 @@ public class AlarmDetailsItemSpinner extends Fragment {
     TextView title;
     @Bind(R.id.alarm_details_item_option)
     Spinner option;
+    private int itemSelected = -1;
 
     private String itemTitle;
     private ArrayList<String> itemOptions = new ArrayList<>();
-    private ItemClickedListener listener;
-    public void setOnItemClickedListener(ItemClickedListener listener){
+    private SpinnerSelectionChangedListener listener;
+    public void setOnSpinnerSelectionChangedListener(SpinnerSelectionChangedListener listener){
         this.listener = listener;
     }
 
-    public interface ItemClickedListener{
-        void onItemClicked();
+    public interface SpinnerSelectionChangedListener{
+        void onSpinnerSelectionChanged(int position);
     }
 
     @Override
@@ -53,20 +55,26 @@ public class AlarmDetailsItemSpinner extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.alarm_details_item_spinner, container, false);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(listener!=null) {
-                    listener.onItemClicked();
-                }
-            }
-        });
         ButterKnife.bind(this, view);
         this.title.setText(itemTitle);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                 R.layout.spinner_list_item, itemOptions);
         adapter.setDropDownViewResource(R.layout.spinner_list_item);
         this.option.setAdapter(adapter);
+        this.option.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position!=itemSelected){
+                    itemSelected = position;
+                    listener.onSpinnerSelectionChanged(position);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         return view;
     }
 }
