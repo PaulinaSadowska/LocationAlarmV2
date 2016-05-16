@@ -21,5 +21,6 @@
     <string name="select_ringtone">Select ringtone for notifications:</string>
     <string name="save">SAVE</string>
     <string name="cancel">CANCEL</string>
+    <string name="delete">Delete</string>
 
 </resources>

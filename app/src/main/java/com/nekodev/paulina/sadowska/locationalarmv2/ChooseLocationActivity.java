@@ -1,9 +1,11 @@
 package com.nekodev.paulina.sadowska.locationalarmv2;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -34,6 +36,8 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmDetailsActivity;
+
+import java.io.OutputStream;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -69,7 +73,7 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_location);
         ButterKnife.bind(this);
-        
+
         Resources res = getResources();
         saveButton.setText(res.getString(R.string.save));
         cancelButton.setText(res.getString(R.string.cancel));
@@ -171,17 +175,6 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
         }
     }
 
-    @OnClick(R.id.choose_location_save)
-    public void saveLocalization(View view) {
-        Intent intent = new Intent(this, AlarmDetailsActivity.class);
-        startActivity(intent);
-    }
-
-    @OnClick(R.id.choose_location_cancel)
-    public void cancelLocalization(View view) {
-        onBackPressed();
-    }
-
     @Override
     public void onConnected(Bundle bundle) {
         mLocationRequest = LocationRequest.create();
@@ -229,5 +222,44 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 mGoogleApiClient, this);
+    }
+
+    @OnClick(R.id.choose_location_cancel)
+    public void cancelLocalization(View view) {
+        onBackPressed();
+    }
+
+    @OnClick(R.id.choose_location_save)
+    public void saveLocalization(View view) {
+        captureScreen();
+    }
+
+    public void captureScreen() {
+        final Activity mActivity = this;
+        GoogleMap.SnapshotReadyCallback callback = new GoogleMap.SnapshotReadyCallback() {
+
+            @Override
+            public void onSnapshotReady(Bitmap snapshot) {
+                Bitmap bitmap = snapshot;
+                OutputStream fout;
+                String filePath = "map" + ".jpeg"; //TODO - name identifing the alarm
+
+                try {
+                    fout = openFileOutput(filePath,
+                            MODE_WORLD_READABLE);
+
+                    // Write the string to the file
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fout);
+                    fout.flush();
+                    fout.close();
+                } catch (Exception e) {
+                    Log.d("ImageCapture", e.getMessage());
+                }
+
+                Intent intent = new Intent(mActivity, AlarmDetailsActivity.class);
+                startActivity(intent);
+            }
+        };
+        mMap.snapshot(callback);
     }
 }

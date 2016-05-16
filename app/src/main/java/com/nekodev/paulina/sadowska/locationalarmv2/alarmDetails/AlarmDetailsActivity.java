@@ -2,9 +2,12 @@ package com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,6 +26,8 @@ import butterknife.OnClick;
  */
 public class AlarmDetailsActivity extends AppCompatActivity {
 
+    @Bind(R.id.alarm_details_toolbar)
+    Toolbar mToolbar;
     @Bind(R.id.alarm_details_title)
     TextView alarmTitle;
     @Bind(R.id.alarm_details_map_preview)
@@ -51,6 +56,11 @@ public class AlarmDetailsActivity extends AppCompatActivity {
         transaction.replace(R.id.alarm_details_fragment, alarmDetailsFragment);
         transaction.commit();
 
+        //TODO - FIX image location hardcoded
+        Bitmap iconBitmap = BitmapFactory.decodeFile("/data/data/com.nekodev.paulina.sadowska.locationalarmv2/files/map.jpeg");
+        if(iconBitmap!=null) {
+            mapPreview.setImageBitmap(iconBitmap);
+        }
     }
 
     @OnClick(R.id.alarm_details_save)
@@ -61,7 +71,13 @@ public class AlarmDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.alarm_details_cancel)
     public void cancelLocalization(View view) {
-        onBackPressed();
+        Intent intent = new Intent(this, AlarmListActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     @OnClick (R.id.alarm_details_edit_location_button)
