@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.nekodev.paulina.sadowska.locationalarmv2.Keys;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
+import com.nekodev.paulina.sadowska.locationalarmv2.Utilities;
 
 /**
  * Created by Paulina Sadowska on 15.05.2016.
@@ -121,7 +122,7 @@ public class AlarmDetailsFragment extends Fragment {
                 if(resultCode== Activity.RESULT_OK) {
                     boolean[] result = intent.getBooleanArrayExtra(Keys.REPEAT_DAYS_KEY);
                     if(result!=null && result.length>0) {
-                        setActiveDays(result);
+                        alarmRepeatingFragment.setOptionText(Utilities.getActiveDaysString(getResources(), result));
                     }
                 }
                 break;
@@ -134,30 +135,5 @@ public class AlarmDetailsFragment extends Fragment {
         args.putString(Keys.AlarmDetailsItemKeys.ITEM_TITLE_KEY, title);
         args.putSerializable(Keys.AlarmDetailsItemKeys.ITEM_OPTION_KEY, options);
         return args;
-    }
-
-    public void setActiveDays(boolean[] activeDays) {
-        String result = "";
-        Resources res = getResources();
-        String[] daysShortNames = res.getStringArray(R.array.days_short_names);
-        int activeCount = 0;
-        for (int i = 0; i < activeDays.length; i++) {
-            if(activeDays[i]){
-                result += daysShortNames[i]+", ";
-                activeCount++;
-            }
-        }
-        if(activeCount == activeDays.length){
-            alarmRepeatingFragment.setOptionText(res.getString(R.string.day_every));
-        }
-        else {
-            if (result.length() > 0) {
-                result = result.substring(0, result.length() - 2);
-            }
-            else{
-                result = res.getString(R.string.day_none);
-            }
-            alarmRepeatingFragment.setOptionText(result);
-        }
     }
 }

@@ -1,63 +1,49 @@
 package com.nekodev.paulina.sadowska.locationalarmv2.alarmList;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
+
 /**
  * Created by Paulina Sadowska on 12.03.16.
  */
 public class AlarmDataItem {
 
     private Boolean isActive;
-    private String location;
+    private String imageName;
+    private LatLng coordinates;
+    private String address;
     private int radiusInMeters;
-    private Boolean isCyclic;
-    private String activeDays;
-    private String ringtone;
-    private Boolean notificationOnly;
+    private AlarmTypes alarmType;
+    private String alarmTone;
+    private boolean[] repeatDays;
 
     public AlarmDataItem() {
-        isActive = true;
-        location = "";
-        radiusInMeters = 1000;
-        isCyclic = false;
-        activeDays = "";
-        ringtone = "";
-        notificationOnly = false;
+        repeatDays = new boolean[7];
     }
-
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
     }
 
     public void setLocation(String location) {
-        this.location = location;
+        this.address = location;
     }
 
     public void setRadiusInMeters(int radiusInMeters) {
         this.radiusInMeters = radiusInMeters;
     }
 
-    public void setIsCyclic(Boolean isCyclic) {
-        this.isCyclic = isCyclic;
+    public void setAlarmTone(String alarmTone) {
+        this.alarmTone = alarmTone;
     }
 
-    public void setActiveDays(String activeDays) {
-        this.activeDays = activeDays;
-    }
-
-    public void setRingtone(String ringtone) {
-        this.ringtone = ringtone;
-    }
-
-    public void setNotificationOnly(Boolean notificationOnly) {
-        this.notificationOnly = notificationOnly;
-    }
 
     public Boolean getIsActive() {
         return isActive;
     }
 
-    public String getLocation() {
-        return location;
+    public String getAddress() {
+        return address;
     }
 
     public int getRadiusInMeters() {
@@ -68,20 +54,40 @@ public class AlarmDataItem {
         return radiusInMeters / 1000.0;
     }
 
-    public Boolean getIsCyclic() {
-        return isCyclic;
+    public String getAlarmTone() {
+        return alarmTone;
     }
 
-    public String getActiveDays() {
-        return activeDays;
+    public String getImageName() {
+        return imageName;
     }
 
-    public String getRingtone() {
-        return ringtone;
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 
-    public Boolean getNotificationOnly() {
-        return notificationOnly;
+    public LatLng getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(LatLng coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    public AlarmTypes getAlarmType() {
+        return alarmType;
+    }
+
+    public void setAlarmType(AlarmTypes alarmType) {
+        this.alarmType = alarmType;
+    }
+
+    public boolean[] getRepeatDays() {
+        return repeatDays;
+    }
+
+    public void setRepeatDays(boolean[] repeatDays) {
+        this.repeatDays = repeatDays;
     }
 }
 

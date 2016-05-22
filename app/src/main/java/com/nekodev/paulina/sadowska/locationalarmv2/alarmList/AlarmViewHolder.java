@@ -7,7 +7,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
-import com.nekodev.paulina.sadowska.locationalarmv2.Utilities;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,26 +31,6 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnC
         super(itemView);
         itemView.setOnClickListener(this);
         ButterKnife.bind(this, itemView);
-    }
-
-    public void bindViewHolder(AlarmDataItem mDataItem) {
-        alarmActiveSwitch.setChecked(mDataItem.getIsActive());
-        alarmLocalization.setText(mDataItem.getLocation());
-        alarmRadius.setText(" + " + mDataItem.getRadiusInKilometers() + "km");
-        alarmDays.setText(mDataItem.getActiveDays());
-        if(mDataItem.getNotificationOnly())
-            alarmNotificationType.setText("powiadomienie");
-        else
-            alarmNotificationType.setText("dzwięk");
-    }
-
-    public AlarmDataItem getAlarmData() {
-        AlarmDataItem item = new AlarmDataItem();
-        item.setLocation(alarmLocalization.getText().toString());
-        item.setIsActive(alarmActiveSwitch.isChecked());
-        item.setRadiusInMeters(Utilities.kilometersToMeters(alarmRadius.getText()));
-        item.setActiveDays(alarmDays.getText().toString());
-        return item;
     }
 
     public Switch getIsActiveSwitch() {

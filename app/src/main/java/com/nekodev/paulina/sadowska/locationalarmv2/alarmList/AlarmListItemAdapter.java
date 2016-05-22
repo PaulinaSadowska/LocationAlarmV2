@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.Switch;
 
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
+import com.nekodev.paulina.sadowska.locationalarmv2.Utilities;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmDetailsActivity;
+import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
 
 import java.util.ArrayList;
 
@@ -51,7 +53,7 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
 
     @Override
     public void onBindViewHolder(final AlarmViewHolder holder, final int position) {
-        holder.bindViewHolder(mAlarmDataItems.get(position));
+        bindViewHolderData(holder, mAlarmDataItems.get(position));
         holder.setClickListener(new AlarmViewHolder.ClickListener() {
             @Override
             public void onClick(View v, int pos, boolean isLongClick) {
@@ -78,6 +80,21 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
                 notifyItemChanged(position);
             }
         });
+
+    }
+
+    private void bindViewHolderData(AlarmViewHolder holder, AlarmDataItem alarmDataItem) {
+
+        holder.alarmActiveSwitch.setChecked(alarmDataItem.getIsActive());
+        holder.alarmLocalization.setText(alarmDataItem.getAddress());
+
+        String radiusStr = " + " + alarmDataItem.getRadiusInKilometers() + mActivity.getString(R.string.km);
+        holder.alarmRadius.setText(radiusStr);
+        holder.alarmDays.setText(Utilities.getActiveDaysString(mActivity.getResources(), alarmDataItem.getRepeatDays()));
+        if(alarmDataItem.getAlarmType()== AlarmTypes.NOTIFICATION)
+            holder.alarmNotificationType.setText(mActivity.getString(R.string.notifications));
+        else
+            holder.alarmNotificationType.setText(mActivity.getString(R.string.sound));
 
     }
 

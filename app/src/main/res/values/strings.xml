@@ -22,5 +22,8 @@
     <string name="save">SAVE</string>
     <string name="cancel">CANCEL</string>
     <string name="delete">Delete</string>
+    <string name="notifications">Notification</string>
+    <string name="sound">Sound</string>
+    <string name="km">km</string>
 
 </resources>
