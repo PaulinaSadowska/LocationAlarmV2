@@ -13,9 +13,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nekodev.paulina.sadowska.locationalarmv2.ChooseLocationActivity;
+import com.nekodev.paulina.sadowska.locationalarmv2.Keys;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmList.AlarmListActivity;
+import com.nekodev.paulina.sadowska.locationalarmv2.chooseLocation.ChooseLocationActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -45,19 +46,20 @@ public class AlarmDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.alarm_details_activity);
         ButterKnife.bind(this);
 
-        alarmTitle.setText("Piotrowo 2, Poznań");
-        mapPreview.setImageResource(R.drawable.maps_dummy);
+        String address = getIntent().getStringExtra(Keys.LocationData.ADDRESS);
+        alarmTitle.setText(address);
 
         Resources res = getResources();
         saveButton.setText(res.getString(R.string.save));
         cancelButton.setText(res.getString(R.string.cancel));
 
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.alarm_details_fragment, alarmDetailsFragment);
         transaction.commit();
 
-        //TODO - FIX image location hardcoded
-        Bitmap iconBitmap = BitmapFactory.decodeFile("/data/data/com.nekodev.paulina.sadowska.locationalarmv2/files/map.jpeg");
+        String previewImageName = getIntent().getStringExtra(Keys.LocationData.IMAGE_NAME);
+        Bitmap iconBitmap = BitmapFactory.decodeFile(getFilesDir().getPath()+"/"+previewImageName);
         if(iconBitmap!=null) {
             mapPreview.setImageBitmap(iconBitmap);
         }
