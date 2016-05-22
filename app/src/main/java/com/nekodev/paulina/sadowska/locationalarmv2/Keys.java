@@ -23,5 +23,18 @@ public final class Keys {
         public static final String ITEM_OPTION_KEY = "itemOptionKey";
     }
 
+    public final class AlarmData{
+        public static final String ALARM_COUNT = "alarmDataAlarmCount";
+        public static final String IS_ACTIVE = "alarmDataItemIsActive";
+        public static final String IMAGE_NAME = "alarmDataItemImageName";
+        public static final String LATITUDE = "alarmDataItemLatitude";
+        public static final String LONGITUDE = "alarmDataItemLongitude";
+        public static final String ADDRESS = "alarmDataItemAddress";
+        public static final String RADIUS = "alarmDataItemRadius";
+        public static final String ALARM_TYPE = "alarmDataItemAlarmType";
+        public static final String ALARM_TONE = "alarmDataItemAlarmTone";
+        public static final String REPEAT_DAYS = "alarmDataItemRepeatDays";
+    }
+
     public static final String REPEAT_DAYS_KEY = "repeatDaysKey";
 }

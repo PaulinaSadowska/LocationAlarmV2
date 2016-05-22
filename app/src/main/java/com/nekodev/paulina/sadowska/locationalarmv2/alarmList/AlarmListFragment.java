@@ -43,7 +43,7 @@ public class AlarmListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         ArrayList<AlarmDataItem> mAlarmDataItems;
         mAlarmDataItems = new ArrayList<>();
-
+        
         AlarmDataItem item = new AlarmDataItem();
         item.setIsActive(true);
         item.setRadiusInMeters(3000);

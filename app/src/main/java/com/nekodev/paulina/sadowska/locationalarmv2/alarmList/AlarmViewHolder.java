@@ -2,6 +2,7 @@ package com.nekodev.paulina.sadowska.locationalarmv2.alarmList;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -20,40 +21,44 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder implements View.OnC
     ImageView deleteButton;
     @Bind(R.id.list_item_switch)
     Switch alarmActiveSwitch;
-    @Bind(R.id.list_item_localization)  TextView alarmLocalization;
-    @Bind(R.id.list_item_notification_type)  TextView alarmNotificationType;
-    @Bind(R.id.list_item_radius)        TextView alarmRadius;
-    @Bind(R.id.list_item_active_days)   TextView alarmDays;
+    @Bind(R.id.list_item_localization)
+    TextView alarmLocalization;
+    @Bind(R.id.list_item_notification_type)
+    TextView alarmNotificationType;
+    @Bind(R.id.list_item_radius)
+    TextView alarmRadius;
+    @Bind(R.id.list_item_active_days)
+    TextView alarmDays;
 
-    private ClickListener clickListener;
+    private ListItemListener listener;
+    public void setListItemListener(ListItemListener listener){
+        this.listener = listener;
+    }
 
     public AlarmViewHolder(View itemView) {
         super(itemView);
         itemView.setOnClickListener(this);
         ButterKnife.bind(this, itemView);
-    }
-
-    public Switch getIsActiveSwitch() {
-        return alarmActiveSwitch;
-    }
-
-    public ImageView getDeleteButton() {
-        return deleteButton;
-    }
-
-    /* Interface for handling clicks - both normal and long ones. */
-    public interface ClickListener {
-        void onClick(View v, int position, boolean isLongClick);
-    }
-
-    /* Setter for listener. */
-    public void setClickListener(ClickListener clickListener) {
-        this.clickListener = clickListener;
+        alarmActiveSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(listener!=null)
+                    listener.onIsActiveChange(getPosition(), isChecked);
+            }
+        });
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listener!=null)
+                    listener.onDeleteButtonClicked(getPosition());
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
-        clickListener.onClick(v, getPosition(), false);
+        if(listener!=null)
+            listener.onCardClicked(getPosition());
     }
 }
 

@@ -6,9 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.Switch;
 
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 import com.nekodev.paulina.sadowska.locationalarmv2.Utilities;
@@ -25,6 +22,7 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
     private ArrayList<AlarmDataItem> mAlarmDataItems;
     private AlarmViewHolder mAlarmViewHolder;
     private Activity mActivity;
+    private boolean onBind;
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public AlarmListItemAdapter(ArrayList<AlarmDataItem> alarmData, Activity mActivity) {
@@ -46,41 +44,39 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
     public AlarmViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
         // create a new view
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.alarm_list_item_simple, parent, false);
+        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.alarm_list_item_simple, parent, false);
             mAlarmViewHolder = new AlarmViewHolder(v);
         return mAlarmViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final AlarmViewHolder holder, final int position) {
+    public void onBindViewHolder(AlarmViewHolder holder, int position) {
+        onBind = true;
         bindViewHolderData(holder, mAlarmDataItems.get(position));
-        holder.setClickListener(new AlarmViewHolder.ClickListener() {
+        holder.setListItemListener(new ListItemListener() {
             @Override
-            public void onClick(View v, int pos, boolean isLongClick) {
+            public void onCardClicked(int pos) {
                 Intent intent = new Intent(mActivity, AlarmDetailsActivity.class);
                 mActivity.startActivity(intent);
             }
-        });
 
-        Switch isActiveSwitch = holder.getIsActiveSwitch();
-        if (isActiveSwitch != null) {
-            isActiveSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    mAlarmDataItems.get(position).setIsActive(isChecked);
-                    notifyItemChanged(position);
-                }
-            });
-        }
-        ImageView deleteButton = holder.getDeleteButton();
-        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                mAlarmDataItems.remove(position);
-                notifyItemChanged(position);
+            public void onDeleteButtonClicked(int pos) {
+                mAlarmDataItems.remove(pos);
+                if(!onBind){
+                    notifyItemChanged(pos);
+                }
+            }
+
+            @Override
+            public void onIsActiveChange(int pos, boolean isChecked) {
+                mAlarmDataItems.get(pos).setIsActive(isChecked);
+                if(!onBind) {
+                    notifyItemChanged(pos);
+                }
             }
         });
-
+        onBind = false;
     }
 
     private void bindViewHolderData(AlarmViewHolder holder, AlarmDataItem alarmDataItem) {

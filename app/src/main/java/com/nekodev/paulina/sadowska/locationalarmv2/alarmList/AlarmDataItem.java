@@ -1,5 +1,7 @@
 package com.nekodev.paulina.sadowska.locationalarmv2.alarmList;
 
+import android.net.Uri;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
 
@@ -14,7 +16,7 @@ public class AlarmDataItem {
     private String address;
     private int radiusInMeters;
     private AlarmTypes alarmType;
-    private String alarmTone;
+    private Uri alarmTone;
     private boolean[] repeatDays;
 
     public AlarmDataItem() {
@@ -33,7 +35,7 @@ public class AlarmDataItem {
         this.radiusInMeters = radiusInMeters;
     }
 
-    public void setAlarmTone(String alarmTone) {
+    public void setAlarmTone(Uri alarmTone) {
         this.alarmTone = alarmTone;
     }
 
@@ -54,7 +56,7 @@ public class AlarmDataItem {
         return radiusInMeters / 1000.0;
     }
 
-    public String getAlarmTone() {
+    public Uri getAlarmTone() {
         return alarmTone;
     }
 
