@@ -1,6 +1,4 @@
-package com.nekodev.paulina.sadowska.locationalarmv2.alarmList;
-
-import android.net.Uri;
+package com.nekodev.paulina.sadowska.locationalarmv2.data;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
@@ -10,17 +8,20 @@ import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
  */
 public class AlarmDataItem {
 
+    private int id;
     private Boolean isActive;
     private String imageName;
-    private LatLng coordinates;
+    private double latitude;
+    private double longitude;
     private String address;
     private int radiusInMeters;
     private AlarmTypes alarmType;
-    private Uri alarmTone;
-    private boolean[] repeatDays;
+    private String alarmTone;
+   // private boolean[] repeatDays;
 
-    public AlarmDataItem() {
-        repeatDays = new boolean[7];
+    public AlarmDataItem(int id) {
+       // repeatDays = new boolean[7];
+        this.id = id;
     }
 
     public void setIsActive(Boolean isActive) {
@@ -35,7 +36,7 @@ public class AlarmDataItem {
         this.radiusInMeters = radiusInMeters;
     }
 
-    public void setAlarmTone(Uri alarmTone) {
+    public void setAlarmTone(String alarmTone) {
         this.alarmTone = alarmTone;
     }
 
@@ -56,7 +57,7 @@ public class AlarmDataItem {
         return radiusInMeters / 1000.0;
     }
 
-    public Uri getAlarmTone() {
+    public String getAlarmTone() {
         return alarmTone;
     }
 
@@ -69,11 +70,12 @@ public class AlarmDataItem {
     }
 
     public LatLng getCoordinates() {
-        return coordinates;
+        return new LatLng(latitude, longitude);
     }
 
     public void setCoordinates(LatLng coordinates) {
-        this.coordinates = coordinates;
+        this.latitude = coordinates.latitude;
+        this.longitude = coordinates.longitude;
     }
 
     public AlarmTypes getAlarmType() {
@@ -84,12 +86,12 @@ public class AlarmDataItem {
         this.alarmType = alarmType;
     }
 
-    public boolean[] getRepeatDays() {
+    /*public boolean[] getRepeatDays() {
         return repeatDays;
     }
 
     public void setRepeatDays(boolean[] repeatDays) {
         this.repeatDays = repeatDays;
-    }
+    }*/
 }
 

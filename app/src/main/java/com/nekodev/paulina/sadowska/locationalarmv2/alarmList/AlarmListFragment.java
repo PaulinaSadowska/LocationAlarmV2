@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
+import com.nekodev.paulina.sadowska.locationalarmv2.data.AlarmDataItem;
 
 import java.util.ArrayList;
 
@@ -44,20 +45,20 @@ public class AlarmListFragment extends Fragment {
         ArrayList<AlarmDataItem> mAlarmDataItems;
         mAlarmDataItems = new ArrayList<>();
         
-        AlarmDataItem item = new AlarmDataItem();
+        AlarmDataItem item = new AlarmDataItem(1);
         item.setIsActive(true);
         item.setRadiusInMeters(3000);
         item.setAlarmType(AlarmTypes.NOTIFICATION);
         item.setLocation("Piotrowo 2");
-        item.setRepeatDays(new boolean[]{true, false, false, true, false, true, false});
+       // item.setRepeatDays(new boolean[]{true, false, false, true, false, true, false});
         mAlarmDataItems.add(item);
 
-        AlarmDataItem item2 = new AlarmDataItem();
+        AlarmDataItem item2 = new AlarmDataItem(2);
         item2.setIsActive(false);
         item2.setRadiusInMeters(1500);
         item2.setAlarmType(AlarmTypes.SOUND);
         item2.setLocation("Warszawa Centralna");
-        item2.setRepeatDays(new boolean[]{true, true, true, true, true, true, true});
+       // item2.setRepeatDays(new boolean[]{true, true, true, true, true, true, true});
         mAlarmDataItems.add(item2);
 
         mAlarmListAdapter = new AlarmListItemAdapter(mAlarmDataItems, getActivity());

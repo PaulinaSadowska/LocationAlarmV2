@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
-import com.nekodev.paulina.sadowska.locationalarmv2.Utilities;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmDetailsActivity;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
+import com.nekodev.paulina.sadowska.locationalarmv2.data.AlarmDataItem;
 
 import java.util.ArrayList;
 
@@ -86,7 +86,7 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
 
         String radiusStr = " + " + alarmDataItem.getRadiusInKilometers() + mActivity.getString(R.string.km);
         holder.alarmRadius.setText(radiusStr);
-        holder.alarmDays.setText(Utilities.getActiveDaysString(mActivity.getResources(), alarmDataItem.getRepeatDays()));
+       // holder.alarmDays.setText(Utilities.getActiveDaysString(mActivity.getResources(), alarmDataItem.getRepeatDays()));
         if(alarmDataItem.getAlarmType()== AlarmTypes.NOTIFICATION)
             holder.alarmNotificationType.setText(mActivity.getString(R.string.notifications));
         else
