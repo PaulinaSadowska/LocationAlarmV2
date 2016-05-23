@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.AlarmDataItem;
+import com.nekodev.paulina.sadowska.locationalarmv2.data.DataManager;
 
 import java.util.ArrayList;
 
@@ -44,14 +45,7 @@ public class AlarmListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         ArrayList<AlarmDataItem> mAlarmDataItems;
         mAlarmDataItems = new ArrayList<>();
-        
-        AlarmDataItem item = new AlarmDataItem(1);
-        item.setIsActive(true);
-        item.setRadiusInMeters(3000);
-        item.setAlarmType(AlarmTypes.NOTIFICATION);
-        item.setLocation("Piotrowo 2");
-       // item.setRepeatDays(new boolean[]{true, false, false, true, false, true, false});
-        mAlarmDataItems.add(item);
+        DataManager manager = new DataManager(getActivity().getFilesDir().getPath(), "alarms");
 
         AlarmDataItem item2 = new AlarmDataItem(2);
         item2.setIsActive(false);

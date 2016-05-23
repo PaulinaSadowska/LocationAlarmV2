@@ -7,17 +7,17 @@ import java.io.IOException;
 /**
  * Created by Paulina Sadowska on 23.05.2016.
  */
-public class FileReader {
+public class FileManager {
 
     private String fileName;
     private String filesDir; //this.getFilesDir()
 
-    public FileReader(String filesDir, String fileName){
+    public FileManager(String filesDir, String fileName){
         this.filesDir = filesDir;
         this.fileName = fileName;
     }
 
-    private String readFromFile() {
+   public String readFromFile() {
         BufferedReader br;
         String response;
 
@@ -41,7 +41,7 @@ public class FileReader {
         return response;
     }
 
-    private void saveToFile(String json) {
+    public void saveToFile(String json) {
         FileOutputStream outputStream;
 
         try {
