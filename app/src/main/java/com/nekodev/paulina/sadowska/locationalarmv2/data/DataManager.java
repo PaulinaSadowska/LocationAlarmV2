@@ -1,8 +1,10 @@
 package com.nekodev.paulina.sadowska.locationalarmv2.data;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
-import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * Created by Paulina Sadowska on 23.05.2016.
@@ -10,31 +12,26 @@ import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
 public class DataManager {
 
     private FileManager fileReader;
+    private ArrayList<AlarmDataItem> mAlarmDataItems = new ArrayList<>();
+
 
     public DataManager(String filesDir, String fileName) {
         fileReader = new FileManager(filesDir, fileName);
-        AlarmDataItem item = new AlarmDataItem(1);
-        item.setIsActive(true);
-        item.setRadiusInMeters(3000);
-        item.setAlarmType(AlarmTypes.NOTIFICATION);
-        item.setLocation("Piotrowo 2");
-        // item.setRepeatDays(new boolean[]{true, false, false, true, false, true, false});
-        item.setCoordinates(new LatLng(0.22, 22.3));
-        item.setAlarmTone("some tone");
-        Gson gson = new Gson();
-        String json = gson.toJson(item);
-        fileReader.saveToFile(json);
-        String response = fileReader.readFromFile();
-        AlarmDataItem obj2 = gson.fromJson(response, AlarmDataItem.class);
 
+        Gson gson = new Gson();
+        Type collectionType = new TypeToken<ArrayList<AlarmDataItem>>(){}.getType();
+        String response = fileReader.readFromFile();
+        mAlarmDataItems = gson.fromJson(response, collectionType);
     }
 
-    /*DataObject obj = new DataObject();
-        Gson gson = new Gson();
-        String json = gson.toJson(obj);
-        saveJsonToFile(json);
-        String response = readJsonFromFile();
-        DataObject obj2 = gson.fromJson(response, DataObject.class);
-        */
+    public ArrayList<AlarmDataItem> getAlarmData(){
+        return mAlarmDataItems;
+    }
 
+    public void addAlarm(AlarmDataItem alarmDataItem){
+        mAlarmDataItems.add(alarmDataItem);
+        Gson gson = new Gson();
+        String json = gson.toJson(mAlarmDataItems);
+        fileReader.saveToFile(json);
+    }
 }

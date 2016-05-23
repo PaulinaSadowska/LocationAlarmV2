@@ -10,11 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
-import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
-import com.nekodev.paulina.sadowska.locationalarmv2.data.AlarmDataItem;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.DataManager;
-
-import java.util.ArrayList;
 
 /**
  * Created by Paulina Sadowska on 08.05.2016.
@@ -43,19 +39,8 @@ public class AlarmListFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ArrayList<AlarmDataItem> mAlarmDataItems;
-        mAlarmDataItems = new ArrayList<>();
         DataManager manager = new DataManager(getActivity().getFilesDir().getPath(), "alarms");
-
-        AlarmDataItem item2 = new AlarmDataItem(2);
-        item2.setIsActive(false);
-        item2.setRadiusInMeters(1500);
-        item2.setAlarmType(AlarmTypes.SOUND);
-        item2.setLocation("Warszawa Centralna");
-       // item2.setRepeatDays(new boolean[]{true, true, true, true, true, true, true});
-        mAlarmDataItems.add(item2);
-
-        mAlarmListAdapter = new AlarmListItemAdapter(mAlarmDataItems, getActivity());
+        mAlarmListAdapter = new AlarmListItemAdapter(manager.getAlarmData(), getActivity());
         mAlarmRecyclerView.setAdapter(mAlarmListAdapter);
     }
 }

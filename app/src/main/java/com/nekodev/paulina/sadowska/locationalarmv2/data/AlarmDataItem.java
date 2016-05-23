@@ -17,10 +17,10 @@ public class AlarmDataItem {
     private int radiusInMeters;
     private AlarmTypes alarmType;
     private String alarmTone;
-   // private boolean[] repeatDays;
+    private boolean[] repeatDays;
 
     public AlarmDataItem(int id) {
-       // repeatDays = new boolean[7];
+        repeatDays = new boolean[7];
         this.id = id;
     }
 
@@ -86,12 +86,12 @@ public class AlarmDataItem {
         this.alarmType = alarmType;
     }
 
-    /*public boolean[] getRepeatDays() {
+    public boolean[] getRepeatDays() {
         return repeatDays;
     }
 
     public void setRepeatDays(boolean[] repeatDays) {
         this.repeatDays = repeatDays;
-    }*/
+    }
 }
 
