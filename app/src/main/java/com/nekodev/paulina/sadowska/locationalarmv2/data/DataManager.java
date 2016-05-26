@@ -99,7 +99,7 @@ public class DataManager {
         save();
     }
 
-    public void editAlarmActive(int alarmId, boolean isActive)
+    public void editAlarmIsActive(int alarmId, boolean isActive)
     {
         AlarmDataItem item = mAlarmDataItems.get(alarmId);
         item.setIsActive(isActive);
