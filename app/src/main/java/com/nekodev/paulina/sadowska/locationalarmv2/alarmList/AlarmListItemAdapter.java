@@ -33,6 +33,10 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
         this.mActivity = mActivity;
         manager = DataManager.getInstance(path, fileName);
         //initMockData();
+        updateKeyMap();
+    }
+
+    private void updateKeyMap(){
         int position = 0;
         for (Integer alarmId : manager.getKeys()) {
             alarmIds.put(position, alarmId);
@@ -52,7 +56,10 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
 
     public void remove(int position) {
         manager.remove(getAlarmId(position));
-        notifyItemRemoved(position);
+        updateKeyMap();
+        if(!onBind){
+            notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -65,7 +72,7 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(AlarmViewHolder holder, final int position) {
+    public void onBindViewHolder(AlarmViewHolder holder, int position) {
         onBind = true;
         bindViewHolderData(holder, manager.get(getAlarmId(position)));
         holder.setListItemListener(new ListItemListener() {
@@ -76,18 +83,15 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
             }
 
             @Override
-            public void onDeleteButtonClicked(int pos) {
-                manager.remove(getAlarmId(position));
-                if(!onBind){
-                    notifyItemChanged(pos);
-                }
+            public void onDeleteButtonClicked(int position) {
+                remove(position);
             }
 
             @Override
-            public void onIsActiveChange(int pos, boolean isChecked) {
-                manager.get(getAlarmId(position)).setIsActive(isChecked);
+            public void onIsActiveChange(int position, boolean isChecked) {
+                manager.editAlarmIsActive(getAlarmId(position), isChecked);
                 if(!onBind) {
-                    notifyItemChanged(pos);
+                    notifyItemChanged(position);
                 }
             }
         });
