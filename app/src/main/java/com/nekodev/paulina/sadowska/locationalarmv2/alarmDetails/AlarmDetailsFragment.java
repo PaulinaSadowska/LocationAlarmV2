@@ -26,7 +26,21 @@ public class AlarmDetailsFragment extends Fragment {
     private AlarmDetailsItem alarmSoundFragment = new AlarmDetailsItem();
     private AlarmDetailsItem alarmRepeatingFragment = new AlarmDetailsItem();
     private AlarmTypes alarmType = AlarmTypes.SOUND;
+    private String alarmSound = "";
+    private boolean[] repeatDays = new boolean[]{false, false, false, false, false, false, false};
 
+
+    public AlarmTypes getAlarmType(){
+        return alarmType;
+    }
+
+    public String getAlarmSound(){
+        return alarmSound;
+    }
+
+    public boolean[] getRepeatDays(){
+        return repeatDays;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,7 +74,8 @@ public class AlarmDetailsFragment extends Fragment {
                     defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_NOTIFICATION);
                 }
                 Ringtone defaultRingtone = RingtoneManager.getRingtone(getActivity(), defaultRingtoneUri);
-                alarmSoundFragment.setOptionText(defaultRingtone.getTitle(getActivity()));
+                alarmSound = defaultRingtone.getTitle(getActivity());
+                alarmSoundFragment.setOptionText(alarmSound);
             }
         });
 
@@ -71,10 +86,14 @@ public class AlarmDetailsFragment extends Fragment {
         alarmSoundFragment.setOnItemClickedListener(new AlarmDetailsItem.ItemClickedListener() {
             @Override
             public void onItemClicked() {
-                if(alarmType==AlarmTypes.SOUND)
+                if(alarmType==AlarmTypes.SOUND) {
+                    alarmType = AlarmTypes.SOUND;
                     startSoundPickerActivity(RingtoneManager.TYPE_ALARM);
-                else if(alarmType == AlarmTypes.NOTIFICATION)
+                }
+                else if(alarmType == AlarmTypes.NOTIFICATION) {
+                    alarmType = AlarmTypes.NOTIFICATION;
                     startSoundPickerActivity(RingtoneManager.TYPE_NOTIFICATION);
+                }
             }
         });
         alarmRepeatingFragment.setArguments(getAlarmArg(res.getString(R.string.repeat_weekly_title) + ":", res.getString(R.string.day_none)));
@@ -107,14 +126,14 @@ public class AlarmDetailsFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-       // super.onActivityResult(requestCode, resultCode, intent);
         switch(requestCode){
             case Keys.ActivityResultKeys.SELECT_SOUND_REQUEST_CODE:
                 if(resultCode== Activity.RESULT_OK) {
                     Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                     if (uri != null) {
                         Ringtone ringtone = RingtoneManager.getRingtone(getActivity(), uri);
-                        alarmSoundFragment.setOptionText(ringtone.getTitle(getActivity()));
+                        alarmSound = ringtone.getTitle(getActivity());
+                        alarmSoundFragment.setOptionText(alarmSound);
                     }
                 }
                 break;
@@ -122,7 +141,8 @@ public class AlarmDetailsFragment extends Fragment {
                 if(resultCode== Activity.RESULT_OK) {
                     boolean[] result = intent.getBooleanArrayExtra(Keys.REPEAT_DAYS_KEY);
                     if(result!=null && result.length>0) {
-                        alarmRepeatingFragment.setOptionText(Utilities.getActiveDaysString(getResources(), result));
+                        repeatDays = result;
+                        alarmRepeatingFragment.setOptionText(Utilities.getActiveDaysString(getResources(), repeatDays));
                     }
                 }
                 break;
@@ -130,7 +150,7 @@ public class AlarmDetailsFragment extends Fragment {
         }
     }
 
-    public Bundle getAlarmTypeArg(String title, String[] options) {
+    public Bundle getAlarmTypeArg(String title, String[] options) { //used when creating nested fragment
         Bundle args = new Bundle();
         args.putString(Keys.AlarmDetailsItemKeys.ITEM_TITLE_KEY, title);
         args.putSerializable(Keys.AlarmDetailsItemKeys.ITEM_OPTION_KEY, options);

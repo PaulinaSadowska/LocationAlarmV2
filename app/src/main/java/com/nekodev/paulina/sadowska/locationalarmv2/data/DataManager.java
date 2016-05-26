@@ -6,11 +6,10 @@ import com.google.gson.reflect.TypeToken;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Created by Paulina Sadowska on 23.05.2016.
@@ -18,17 +17,24 @@ import java.util.Random;
 public class DataManager {
 
     private FileManager fileReader;
-    private Map<Integer, AlarmDataItem> mAlarmDataItems;
+    private Map<Integer, AlarmDataItem> mAlarmDataItems = new HashMap<>();
+    private static DataManager manager;
 
+    public static DataManager getInstance(String filesDir, String fileName){
+        if(manager == null){
+            manager = new DataManager(filesDir, fileName);
+        }
+        return manager;
+    }
 
-    public DataManager(String filesDir, String fileName) {
+    private DataManager(String filesDir, String fileName) {
         fileReader = new FileManager(filesDir, fileName);
         initAlarmCollection();
     }
 
     private void initAlarmCollection(){
         Gson gson = new Gson();
-        Type collectionType = new TypeToken<ArrayList<AlarmDataItem>>(){}.getType();
+        Type collectionType = new TypeToken<HashMap<Integer, AlarmDataItem>>(){}.getType();
         String response = fileReader.readFromFile();
         mAlarmDataItems = gson.fromJson(response, collectionType);
         if(mAlarmDataItems == null){
@@ -36,7 +42,7 @@ public class DataManager {
         }
     }
 
-    public int getAvailableId() {
+    private int getAvailableId() {
         int availableId = 0;
         Random r = new Random();
 
@@ -59,21 +65,7 @@ public class DataManager {
 
         mAlarmDataItems.put(item.getAlarmId(), item);
 
-        AlarmDataItem item2 = new AlarmDataItem(getAvailableId());
-        item2.setIsActive(false);
-        item2.setRadiusInMeters(500);
-        item2.setAlarmType(AlarmTypes.SOUND);
-        item2.setLocation("Paris");
-        item2.setRepeatDays(new boolean[]{true, true, true, true, true, true, true});
-        item2.setCoordinates(new LatLng(0.22, 22.3));
-
-        mAlarmDataItems.put(item2.getAlarmId(), item2);
-
         save();
-    }
-
-    public Collection<AlarmDataItem> getAlarmData(){
-        return mAlarmDataItems.values();
     }
 
     public int addAlarm(LatLng coordinates, String address, int radius){
@@ -119,5 +111,13 @@ public class DataManager {
 
     public int numberOfAlarms() {
         return mAlarmDataItems.size();
+    }
+
+    public String getImageId(int alarmId) {
+        return mAlarmDataItems.get(alarmId).getImageName();
+    }
+
+    public Set<Integer> getKeys() {
+        return mAlarmDataItems.keySet();
     }
 }

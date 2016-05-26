@@ -9,7 +9,7 @@ import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
 public class AlarmDataItem {
 
     private int alarmId;
-    private Boolean isActive;
+    private boolean isActive;
     private double latitude;
     private double longitude;
     private String address;
@@ -19,11 +19,12 @@ public class AlarmDataItem {
     private boolean[] repeatDays;
 
     public AlarmDataItem(int alarmId) {
+
         repeatDays = new boolean[7];
         this.alarmId = alarmId;
     }
 
-    public void setIsActive(Boolean isActive) {
+    public void setIsActive(boolean isActive) {
         this.isActive = isActive;
     }
 
@@ -40,7 +41,7 @@ public class AlarmDataItem {
     }
 
 
-    public Boolean getIsActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 

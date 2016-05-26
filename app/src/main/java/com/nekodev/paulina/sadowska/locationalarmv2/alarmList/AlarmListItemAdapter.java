@@ -31,7 +31,19 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
     // Provide a suitable constructor (depends on the kind of dataset)
     public AlarmListItemAdapter(String path, String fileName, Activity mActivity) {
         this.mActivity = mActivity;
-        manager = new DataManager(path, fileName);
+        manager = DataManager.getInstance(path, fileName);
+        //initMockData();
+        int position = 0;
+        for (Integer alarmId : manager.getKeys()) {
+            alarmIds.put(position, alarmId);
+            position++;
+        }
+    }
+
+    private void initMockData(){
+        if(manager!=null) {
+            manager.resetMockAlarmData();
+        }
     }
 
     private int getAlarmId(int position){

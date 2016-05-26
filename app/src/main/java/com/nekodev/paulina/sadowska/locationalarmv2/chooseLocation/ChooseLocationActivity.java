@@ -35,9 +35,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
 import com.nekodev.paulina.sadowska.locationalarmv2.Keys;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmDetailsActivity;
+import com.nekodev.paulina.sadowska.locationalarmv2.data.DataManager;
 
 import java.io.OutputStream;
 
@@ -52,14 +54,12 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     private static final int ZOOM = 13;
     private static final int FILL_COLOR = Color.argb(60, 0, 0, 0);
     private static final int STROKE_COLOR = Color.argb(200, 0, 0, 0);
-    private static final LatLng initialPinLocalization = new LatLng(52.4034891, 16.946969); //assigned when phone localization not found
-    private static final String unknownPlaceAddress = "";
-    private static final int initialRadius = 1000;
+    private LatLng pinLocalization = new LatLng(52.4034891, 16.946969); //assigned when phone localization not found
+    private String placeAddress = "";
+    private int radius = 1000;
     private GoogleMap mMap;
     private PlaceAutocompleteFragment autocompleteFragment;
     private GoogleApiClient mGoogleApiClient;
-
-    private ChosenLocationData locationData;
 
     @Bind(R.id.choose_location_radius_label)
     TextView radiusLabel;
@@ -90,18 +90,14 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
         BuildGoogleApiClient();
         configureAutocompleteFragment();
 
-        //String imageName = getIntent().getExtras(); //TODO - imageName from intent
-        String imageName = "map.jpeg";
-        locationData = new ChosenLocationData(initialPinLocalization, unknownPlaceAddress, initialRadius, imageName);
-
         radiusLabel.setText(getString(R.string.radius_label));
-        radiusSeekbar.setRangePinsByValue(0, locationData.getRadius());
+        radiusSeekbar.setRangePinsByValue(0, radius);
         radiusSeekbar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
             @Override
             public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex,
                                               int rightPinIndex,
                                               String leftPinValue, String rightPinValue) {
-                locationData.setRadius(Integer.parseInt(rightPinValue));
+                radius = Integer.parseInt(rightPinValue);
                 updateMap(false);
             }
         });
@@ -137,8 +133,8 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
 
             @Override
             public void onPlaceSelected(Place place) {
-                locationData.setAddress(place.getAddress());
-                locationData.setCoordinates(place.getLatLng());
+                placeAddress = place.getAddress().toString();
+                pinLocalization = place.getLatLng();
                 updateMap(true);
             }
 
@@ -160,8 +156,8 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
             return;
         }
         mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(locationData.getCoordinates()));
-        if (locationData.getRadius() > 0)
+        mMap.addMarker(new MarkerOptions().position(pinLocalization));
+        if (radius > 0)
             addMarkerWithCircle();
         if (animate) {
             moveCameraToPosition();
@@ -170,17 +166,17 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
 
     private void moveCameraToPosition() {
         CameraPosition c = CameraPosition.builder()
-                .target(locationData.getCoordinates())
+                .target(pinLocalization)
                 .zoom(ZOOM)
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(c), 3000, null);
     }
 
     private void addMarkerWithCircle() {
-        if (locationData.getRadius() > 0) {
+        if (radius > 0) {
             mMap.addCircle(new CircleOptions()
-                    .center(locationData.getCoordinates())
-                    .radius(locationData.getRadius())
+                    .center(pinLocalization)
+                    .radius(radius)
                     .fillColor(FILL_COLOR)
                     .strokeColor(STROKE_COLOR)
                     .strokeWidth(STROKE_WIDTH));
@@ -227,7 +223,7 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     @Override
     public void onLocationChanged(Location location) {
         LatLng placeLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        locationData.setCoordinates(placeLatLng);
+        pinLocalization = placeLatLng;
         updateMap(true);
         stopLocationUpdates();
     }
@@ -248,13 +244,15 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     }
 
     public void captureScreen() {
+        final DataManager manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
+        final int alarmId = manager.addAlarm(pinLocalization, placeAddress, radius);
         GoogleMap.SnapshotReadyCallback callback = new GoogleMap.SnapshotReadyCallback() {
 
             @Override
             public void onSnapshotReady(Bitmap snapshot) {
                 OutputStream fout;
                 try {
-                    fout = openFileOutput(locationData.getPreviewImageName(),
+                    fout = openFileOutput(manager.getImageId(alarmId),
                             MODE_WORLD_READABLE);
 
                     // Write the string to the file
@@ -264,19 +262,15 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
                 } catch (Exception e) {
                     Log.d("ImageCapture", e.getMessage());
                 }
-                startAlarmDetailsActivity();
+                startAlarmDetailsActivity(alarmId);
             }
         };
         mMap.snapshot(callback);
     }
 
-    private void startAlarmDetailsActivity() {
+    private void startAlarmDetailsActivity(int alarmId) {
         Intent intent = new Intent(this, AlarmDetailsActivity.class);
-        intent.putExtra(Keys.LocationData.LATITUDE, locationData.getCoordinates().latitude);
-        intent.putExtra(Keys.LocationData.LONGITUDE, locationData.getCoordinates().longitude);
-        intent.putExtra(Keys.LocationData.RADIUS, locationData.getRadius());
-        intent.putExtra(Keys.LocationData.IMAGE_NAME, locationData.getPreviewImageName());
-        intent.putExtra(Keys.LocationData.ADDRESS, locationData.getAddress());
+        intent.putExtra(Keys.ALARM_ID, alarmId);
         startActivity(intent);
     }
 }

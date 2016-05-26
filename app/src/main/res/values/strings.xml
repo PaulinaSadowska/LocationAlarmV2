@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">LocationAlarmV2</string>
-    <string name="title_activity_choose_location">Location Alarm V2</string>
+    <string name="title_activity_choose_location">Location Alarm</string>
     <string name="radius_label">radius:</string>
     <string name="default_radius_value">500</string>
     <string name="radius_unit_label">m</string>

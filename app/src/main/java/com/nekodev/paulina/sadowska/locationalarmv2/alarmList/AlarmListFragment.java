@@ -9,10 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
-import com.nekodev.paulina.sadowska.locationalarmv2.data.DataManager;
-
-import java.util.ArrayList;
 
 /**
  * Created by Paulina Sadowska on 08.05.2016.
@@ -41,7 +39,7 @@ public class AlarmListFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mAlarmListAdapter = new AlarmListItemAdapter(getActivity().getFilesDir().getPath(), "alarms", getActivity());
+        mAlarmListAdapter = new AlarmListItemAdapter(getActivity().getFilesDir().getPath(), Constants.FILE_NAME, getActivity());
         mAlarmRecyclerView.setAdapter(mAlarmListAdapter);
     }
 }
