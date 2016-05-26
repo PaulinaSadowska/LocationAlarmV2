@@ -34,8 +34,9 @@ public class FileManager {
             response = output.toString();
 
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            //file not found - create new empty file
+            saveToFile("");
+            return "";
 
         }
         return response;

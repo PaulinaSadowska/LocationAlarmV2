@@ -8,9 +8,8 @@ import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
  */
 public class AlarmDataItem {
 
-    private int id;
+    private int alarmId;
     private Boolean isActive;
-    private String imageName;
     private double latitude;
     private double longitude;
     private String address;
@@ -19,9 +18,9 @@ public class AlarmDataItem {
     private String alarmTone;
     private boolean[] repeatDays;
 
-    public AlarmDataItem(int id) {
+    public AlarmDataItem(int alarmId) {
         repeatDays = new boolean[7];
-        this.id = id;
+        this.alarmId = alarmId;
     }
 
     public void setIsActive(Boolean isActive) {
@@ -62,11 +61,11 @@ public class AlarmDataItem {
     }
 
     public String getImageName() {
-        return imageName;
+        return alarmId+"";
     }
 
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
+    public int getAlarmId() {
+        return alarmId;
     }
 
     public LatLng getCoordinates() {

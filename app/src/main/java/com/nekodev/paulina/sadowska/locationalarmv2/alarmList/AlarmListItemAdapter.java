@@ -12,33 +12,35 @@ import com.nekodev.paulina.sadowska.locationalarmv2.Utilities;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmDetailsActivity;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.AlarmDataItem;
+import com.nekodev.paulina.sadowska.locationalarmv2.data.DataManager;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Paulina Sadowska on 12.03.16.
  */
 public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> {
 
-    private ArrayList<AlarmDataItem> mAlarmDataItems;
+    private DataManager manager;
     private AlarmViewHolder mAlarmViewHolder;
     private Activity mActivity;
     private boolean onBind;
 
+    private HashMap<Integer, Integer> alarmIds = new HashMap<>();
+
     // Provide a suitable constructor (depends on the kind of dataset)
-    public AlarmListItemAdapter(ArrayList<AlarmDataItem> alarmData, Activity mActivity) {
+    public AlarmListItemAdapter(String path, String fileName, Activity mActivity) {
         this.mActivity = mActivity;
-        this.mAlarmDataItems = alarmData;
+        manager = new DataManager(path, fileName);
+    }
+
+    private int getAlarmId(int position){
+        return alarmIds.get(position);
     }
 
     public void remove(int position) {
-        mAlarmDataItems.remove(position);
+        manager.remove(getAlarmId(position));
         notifyItemRemoved(position);
-    }
-
-    public void add(AlarmDataItem item) {
-        mAlarmDataItems.add(item);
-        notifyDataSetChanged();
     }
 
     @Override
@@ -51,9 +53,9 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(AlarmViewHolder holder, int position) {
+    public void onBindViewHolder(AlarmViewHolder holder, final int position) {
         onBind = true;
-        bindViewHolderData(holder, mAlarmDataItems.get(position));
+        bindViewHolderData(holder, manager.get(getAlarmId(position)));
         holder.setListItemListener(new ListItemListener() {
             @Override
             public void onCardClicked(int pos) {
@@ -63,7 +65,7 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
 
             @Override
             public void onDeleteButtonClicked(int pos) {
-                mAlarmDataItems.remove(pos);
+                manager.remove(getAlarmId(position));
                 if(!onBind){
                     notifyItemChanged(pos);
                 }
@@ -71,7 +73,7 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
 
             @Override
             public void onIsActiveChange(int pos, boolean isChecked) {
-                mAlarmDataItems.get(pos).setIsActive(isChecked);
+                manager.get(getAlarmId(position)).setIsActive(isChecked);
                 if(!onBind) {
                     notifyItemChanged(pos);
                 }
@@ -97,6 +99,6 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
 
     @Override
     public int getItemCount() {
-        return mAlarmDataItems.size();
+        return manager.numberOfAlarms();
     }
 }

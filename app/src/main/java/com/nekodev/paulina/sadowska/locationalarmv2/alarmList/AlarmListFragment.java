@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.DataManager;
 
+import java.util.ArrayList;
+
 /**
  * Created by Paulina Sadowska on 08.05.2016.
  */
@@ -39,8 +41,7 @@ public class AlarmListFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        DataManager manager = new DataManager(getActivity().getFilesDir().getPath(), "alarms");
-        mAlarmListAdapter = new AlarmListItemAdapter(manager.getAlarmData(), getActivity());
+        mAlarmListAdapter = new AlarmListItemAdapter(getActivity().getFilesDir().getPath(), "alarms", getActivity());
         mAlarmRecyclerView.setAdapter(mAlarmListAdapter);
     }
 }
