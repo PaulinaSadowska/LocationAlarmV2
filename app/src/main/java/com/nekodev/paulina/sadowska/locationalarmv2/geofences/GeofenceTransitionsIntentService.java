@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Google Inc. All Rights Reserved.
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -89,17 +89,21 @@ public class GeofenceTransitionsIntentService extends IntentService {
             DataManager manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
             // Get the geofences that were triggered. A single event can trigger multiple geofences.
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
+            int previousAlarmId = -1;
             for (Geofence triggeringGeofence : triggeringGeofences) {
                 int alarmId = Integer.parseInt(triggeringGeofence.getRequestId());
-                AlarmDataItem alarm = manager.get(alarmId);
-                Calendar today = Calendar.getInstance();
-                int dayOfWeek = (today.get(Calendar.DAY_OF_WEEK)+5)%7;
-                if(alarm.getRepeatDays()[dayOfWeek]) {
-                    if (alarm.getAlarmType() == AlarmTypes.NOTIFICATION) {
-                        sendNotification(alarm);
-                    } else {
-                        triggerAlarm(alarm);
+                if (previousAlarmId != alarmId) {
+                    AlarmDataItem alarm = manager.get(alarmId);
+                    Calendar today = Calendar.getInstance();
+                    int dayOfWeek = (today.get(Calendar.DAY_OF_WEEK) + 5) % 7;
+                    if (alarm.getRepeatDays()[dayOfWeek]) {
+                        if (alarm.getAlarmType() == AlarmTypes.NOTIFICATION) {
+                            sendNotification(alarm);
+                        } else {
+                            triggerAlarm(alarm);
+                        }
                     }
+                    previousAlarmId = alarmId;
                 }
             }
 
@@ -110,7 +114,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
         }
     }
 
-    private void triggerAlarm(AlarmDataItem alarm){
+    private void triggerAlarm(AlarmDataItem alarm) {
         Intent i = new Intent();
         i.setClassName("com.nekodev.paulina.sadowska.locationalarmv2", "com.nekodev.paulina.sadowska.locationalarmv2.AlarmActivity");
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -143,10 +147,9 @@ public class GeofenceTransitionsIntentService extends IntentService {
         // Get a notification builder that's compatible with platform versions >= 4
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         Uri sound;
-        if(alarm.getAlarmToneAddress() == null){
+        if (alarm.getAlarmToneAddress() == null) {
             sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        }
-        else{
+        } else {
             sound = Uri.parse(alarm.getAlarmToneAddress());
         }
 

@@ -15,7 +15,7 @@ public class Constants {
      * Used to set an expiration time for a geofence. After this amount of time Location Services
      * stops tracking the geofence.
      */
-    public static final long GEOFENCE_EXPIRATION_IN_HOURS = 24;
+    public static final long GEOFENCE_EXPIRATION_IN_HOURS = 24 * 356 * 100; //never stops :>
 
     /**
      * For this sample, geofences expire after twelve hours.

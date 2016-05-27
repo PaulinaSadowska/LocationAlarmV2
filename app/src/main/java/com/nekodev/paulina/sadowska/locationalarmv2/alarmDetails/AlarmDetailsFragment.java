@@ -118,6 +118,7 @@ public class AlarmDetailsFragment extends Fragment {
             @Override
             public void onItemClicked() {
                 Intent intent = new Intent(getActivity(), SelectRepeatDaysActivity.class);
+                intent.putExtra(Keys.AlarmDetailsKeys.REPEAT_DAYS, repeatDays);
                 getActivity().startActivityForResult(intent, Keys.ActivityResultKeys.SELECT_DAYS_REQUEST_CODE);
             }
         });
