@@ -46,6 +46,11 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".geofences.MainActivity"
+            android:label="@string/app_name">
+
+        </activity>
+
         <activity android:name=".alarmDetails.AlarmDetailsActivity"
             android:label="@string/app_name"
             android:theme="@style/AlarmDetailsTheme">
@@ -60,6 +65,8 @@
             android:label="@string/repeat_weekly_title"
             android:theme="@style/AlarmDialogTheme">
         </activity>
+
+        <service android:name=".geofences.GeofenceTransitionsIntentService" />
     </application>
 
 </manifest>

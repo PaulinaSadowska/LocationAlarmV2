@@ -85,9 +85,9 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_location);
         ButterKnife.bind(this);
+        manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
         if(getIntent().hasExtra(Keys.ALARM_ID)){
             alarmId = getIntent().getIntExtra(Keys.ALARM_ID, alarmId);
-            manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
             AlarmDataItem alarm = manager.get(alarmId);
             if(alarm!=null){
                 pinLocalization = alarm.getCoordinates();

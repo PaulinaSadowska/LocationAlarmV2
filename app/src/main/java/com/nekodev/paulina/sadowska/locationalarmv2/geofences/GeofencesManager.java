@@ -1,12 +1,10 @@
-package com.nekodev.paulina.sadowska.locationalarmv2.alarmList;
+package com.nekodev.paulina.sadowska.locationalarmv2.geofences;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -16,33 +14,19 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
-import com.nekodev.paulina.sadowska.locationalarmv2.R;
-import com.nekodev.paulina.sadowska.locationalarmv2.geofences.GeofenceErrorMessages;
-import com.nekodev.paulina.sadowska.locationalarmv2.geofences.GeofenceTransitionsIntentService;
 
 import java.util.ArrayList;
-import java.util.Map;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
- * Created by Paulina Sadowska on 08.05.2016.
+ * Created by Paulina Sadowska on 27.05.2016.
  */
-public class AlarmListActivity extends ActionBarActivity implements
+public class GeofencesManager implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
 
-    private static final String TAG = "AlarmListActivity";
-    @Bind(R.id.alarm_list_add_alarm_button)
-    FloatingActionButton addAlarmButton;
+    protected static final String TAG = "GeofencesManager";
 
-    /**
-     * Provides the entry point to Google Play services.
-     */
-    protected GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient mGoogleApiClient;
 
     /**
      * The list of geofences used in this sample.
@@ -58,59 +42,14 @@ public class AlarmListActivity extends ActionBarActivity implements
      * Used when requesting to add or remove geofences.
      */
     private PendingIntent mGeofencePendingIntent;
+    private Activity mActivity;
 
-
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alarm_list);
-        ButterKnife.bind(this);
-
-        // Empty list for storing geofences.
-        mGeofenceList = new ArrayList<>();
-
+    public GeofencesManager(Activity activity){
         // Initially set the PendingIntent used in addGeofences() and removeGeofences() to null.
         mGeofencePendingIntent = null;
-
+        mActivity = activity;
         // Get the geofences used. Geofence data is hard coded in this sample.
         populateGeofenceList();
-
-        // Kick off the request to build GoogleApiClient.
-        buildGoogleApiClient();
-    }
-
-
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
-
-    @OnClick(R.id.alarm_list_add_alarm_button)
-    public void addAlarm(View view) {
-        if(!mGeofencesAdded)
-            addGeofences();
-        else{
-            removeGeofences();
-        }
-       // Intent intent = new Intent(this, ChooseLocationActivity.class);
-       // startActivity(intent);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mGoogleApiClient.disconnect();
     }
 
     /**
@@ -155,16 +94,7 @@ public class AlarmListActivity extends ActionBarActivity implements
         return builder.build();
     }
 
-    /**
-     * Adds geofences, which sets alerts to be notified when the device enters or exits one of the
-     * specified geofences. Handles the success or failure results returned by addGeofences().
-     */
-    public void addGeofences() {
-        if (!mGoogleApiClient.isConnected()) {
-            Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
+    public void addGeofence(){
         try {
             LocationServices.GeofencingApi.addGeofences(
                     mGoogleApiClient,
@@ -181,15 +111,7 @@ public class AlarmListActivity extends ActionBarActivity implements
         }
     }
 
-    /**
-     * Removes geofences, which stops further notifications when the device enters or exits
-     * previously registered geofences.
-     */
-    public void removeGeofences() {
-        if (!mGoogleApiClient.isConnected()) {
-            Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
-            return;
-        }
+    public void removeGeofence(){
         try {
             // Remove geofences.
             LocationServices.GeofencingApi.removeGeofences(
@@ -222,15 +144,14 @@ public class AlarmListActivity extends ActionBarActivity implements
         if (status.isSuccess()) {
             // Update state and save in shared preferences.
             mGeofencesAdded = !mGeofencesAdded;
-
             Toast.makeText(
-                    this,
+                    mActivity,
                     (mGeofencesAdded ? "Geofences added" : "geofencesRemoved"),
                     Toast.LENGTH_SHORT
             ).show();
         } else {
             // Get the status code for the error and log it using a user-friendly message.
-            String errorMessage = GeofenceErrorMessages.getErrorString(this,
+            String errorMessage = GeofenceErrorMessages.getErrorString(mActivity,
                     status.getStatusCode());
             Log.e(TAG, errorMessage);
         }
@@ -249,10 +170,10 @@ public class AlarmListActivity extends ActionBarActivity implements
         if (mGeofencePendingIntent != null) {
             return mGeofencePendingIntent;
         }
-        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
+        Intent intent = new Intent(mActivity, GeofenceTransitionsIntentService.class);
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
         // addGeofences() and removeGeofences().
-        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getService(mActivity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     /**
@@ -260,18 +181,17 @@ public class AlarmListActivity extends ActionBarActivity implements
      * the user's location.
      */
     public void populateGeofenceList() {
-        for (Map.Entry<String, LatLng> entry : Constants.BAY_AREA_LANDMARKS.entrySet()) {
-
-            mGeofenceList.add(new Geofence.Builder()
+        mGeofenceList = new ArrayList<>();
+        mGeofenceList.add(new Geofence.Builder()
                     // Set the request ID of the geofence. This is a string to identify this
                     // geofence.
-                    .setRequestId(entry.getKey())
+                    .setRequestId("CZARNKOW")
 
                     // Set the circular region of this geofence.
                     .setCircularRegion(
-                            entry.getValue().latitude,
-                            entry.getValue().longitude,
-                            Constants.GEOFENCE_RADIUS_IN_METERS
+                            52.4271323,
+                            16.8991132,
+                            1000
                     )
 
                     // Set the expiration duration of the geofence. This geofence gets automatically
@@ -285,7 +205,9 @@ public class AlarmListActivity extends ActionBarActivity implements
 
                     // Create the geofence.
                     .build());
-        }
     }
 
+    public void setGoogleApiClient(GoogleApiClient googleApiClient) {
+        this.mGoogleApiClient = googleApiClient;
+    }
 }
