@@ -223,14 +223,7 @@ public class AlarmListActivity extends ActionBarActivity implements
      *               removeGeofences() get called.
      */
     public void onResult(Status status) {
-        if (status.isSuccess()) {
-
-            Toast.makeText(
-                    this,
-                    status.getStatusMessage(),
-                    Toast.LENGTH_SHORT
-            ).show();
-        } else {
+        if (!status.isSuccess()) {
             // Get the status code for the error and log it using a user-friendly message.
             String errorMessage = GeofenceErrorMessages.getErrorString(this,
                     status.getStatusCode());

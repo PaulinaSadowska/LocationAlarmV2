@@ -26,7 +26,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="4">
 
             <TextView
                 android:id="@+id/list_item_localization"
@@ -34,7 +34,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                tools:text="Czarnkow, ul. Jakastam 1"
+                tools:text="64-700 Czarnkow, ul. Jakastam 1/123"
                 android:gravity="center_vertical" />
 
             <TextView
@@ -52,14 +52,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="2">
 
             <TextView
                 android:id="@+id/list_item_notification_type"
                 style="@style/activeDaysStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:gravity="start|center_vertical"
                 tools:text="powiadomienie"/>
 
@@ -68,9 +68,9 @@
                 style="@style/activeDaysStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:gravity="start|center_vertical"
-                tools:text="pon, wt, śr, sob"/>
+                tools:text="pon, wt, śr, sob, nd, cz, pt, some"/>
 
             <Switch
                 android:id="@+id/list_item_switch"
