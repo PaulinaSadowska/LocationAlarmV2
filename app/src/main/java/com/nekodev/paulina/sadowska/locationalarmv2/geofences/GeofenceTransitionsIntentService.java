@@ -39,6 +39,7 @@ import com.nekodev.paulina.sadowska.locationalarmv2.alarmList.AlarmListActivity;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.AlarmDataItem;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.DataManager;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -91,11 +92,14 @@ public class GeofenceTransitionsIntentService extends IntentService {
             for (Geofence triggeringGeofence : triggeringGeofences) {
                 int alarmId = Integer.parseInt(triggeringGeofence.getRequestId());
                 AlarmDataItem alarm = manager.get(alarmId);
-                if(alarm.getAlarmType() == AlarmTypes.NOTIFICATION) {
-                    sendNotification(alarm);
-                }
-                else{
-                    triggerAlarm(alarm);
+                Calendar today = Calendar.getInstance();
+                int dayOfWeek = (today.get(Calendar.DAY_OF_WEEK)+5)%7;
+                if(alarm.getRepeatDays()[dayOfWeek]) {
+                    if (alarm.getAlarmType() == AlarmTypes.NOTIFICATION) {
+                        sendNotification(alarm);
+                    } else {
+                        triggerAlarm(alarm);
+                    }
                 }
             }
 
