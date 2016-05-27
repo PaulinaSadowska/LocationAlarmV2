@@ -21,7 +21,7 @@ public class DataManager {
     private static DataManager manager;
 
     private OnDataChangedListener listener;
-    public void setOnDataCHangedListener(OnDataChangedListener listener){
+    public void setOnDataChangedListener(OnDataChangedListener listener){
         this.listener = listener;
     }
 

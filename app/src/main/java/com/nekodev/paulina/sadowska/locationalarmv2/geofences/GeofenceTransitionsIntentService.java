@@ -23,6 +23,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
@@ -151,6 +153,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
         // Get a notification builder that's compatible with platform versions >= 4
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         // Define the notification settings.
         builder.setSmallIcon(R.drawable.ic_mode_edit_black_24dp)
                 // In a real app, you may want to use a library like Volley
@@ -158,6 +161,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),
                         R.drawable.ic_mode_edit_black_24dp))
                 .setColor(Color.RED)
+                .setSound(alarmSound)
                 .setContentTitle(notificationDetails)
                 .setContentText(getString(R.string.geofence_transition_notification_text))
                 .setContentIntent(notificationPendingIntent);

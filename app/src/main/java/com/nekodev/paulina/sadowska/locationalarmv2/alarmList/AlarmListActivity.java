@@ -18,8 +18,10 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
+import com.nekodev.paulina.sadowska.locationalarmv2.chooseLocation.ChooseLocationActivity;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.AlarmDataItem;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.DataManager;
+import com.nekodev.paulina.sadowska.locationalarmv2.data.OnDataChangedListener;
 import com.nekodev.paulina.sadowska.locationalarmv2.geofences.GeofenceErrorMessages;
 import com.nekodev.paulina.sadowska.locationalarmv2.geofences.GeofenceTransitionsIntentService;
 
@@ -50,14 +52,11 @@ public class AlarmListActivity extends ActionBarActivity implements
     protected ArrayList<Geofence> mGeofenceList;
 
     /**
-     * Used to keep track of whether geofences were added.
-     */
-    private boolean mGeofencesAdded;
-
-    /**
      * Used when requesting to add or remove geofences.
      */
     private PendingIntent mGeofencePendingIntent;
+
+    private DataManager manager;
 
 
     @Override
@@ -71,9 +70,15 @@ public class AlarmListActivity extends ActionBarActivity implements
 
         // Initially set the PendingIntent used in addGeofences() and removeGeofences() to null.
         mGeofencePendingIntent = null;
-
-        // Get the geofences used. Geofence data is hard coded in this sample.
-        populateGeofenceList();
+        manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
+        manager.setOnDataChangedListener(new OnDataChangedListener() {
+            @Override
+            public void alarmDataChanged() {
+                if(mGoogleApiClient.isConnected()) {
+                    updateGeofences();
+                }
+            }
+        });
 
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
@@ -90,13 +95,8 @@ public class AlarmListActivity extends ActionBarActivity implements
 
     @OnClick(R.id.alarm_list_add_alarm_button)
     public void addAlarm(View view) {
-        if (!mGeofencesAdded)
-            addGeofences();
-        else {
-            removeGeofences();
-        }
-        // Intent intent = new Intent(this, ChooseLocationActivity.class);
-        // startActivity(intent);
+        Intent intent = new Intent(this, ChooseLocationActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -153,11 +153,17 @@ public class AlarmListActivity extends ActionBarActivity implements
         return builder.build();
     }
 
+    private void updateGeofences(){
+        removeGeofences();
+        populateGeofenceList();
+        addGeofences();
+    }
+
     /**
      * Adds geofences, which sets alerts to be notified when the device enters or exits one of the
      * specified geofences. Handles the success or failure results returned by addGeofences().
      */
-    public void addGeofences() {
+    private void addGeofences() {
         if (!mGoogleApiClient.isConnected()) {
             Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
             return;
@@ -183,7 +189,7 @@ public class AlarmListActivity extends ActionBarActivity implements
      * Removes geofences, which stops further notifications when the device enters or exits
      * previously registered geofences.
      */
-    public void removeGeofences() {
+    private void removeGeofences() {
         if (!mGoogleApiClient.isConnected()) {
             Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
             return;
@@ -218,12 +224,10 @@ public class AlarmListActivity extends ActionBarActivity implements
      */
     public void onResult(Status status) {
         if (status.isSuccess()) {
-            // Update state and save in shared preferences.
-            mGeofencesAdded = !mGeofencesAdded;
 
             Toast.makeText(
                     this,
-                    (mGeofencesAdded ? "Geofences added" : "geofencesRemoved"),
+                    status.getStatusMessage(),
                     Toast.LENGTH_SHORT
             ).show();
         } else {
@@ -257,12 +261,11 @@ public class AlarmListActivity extends ActionBarActivity implements
      * This sample hard codes geofence data. A real app might dynamically create geofences based on
      * the user's location.
      */
-    public void populateGeofenceList() {
-        DataManager manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
+    private void populateGeofenceList() {
         mGeofenceList.clear();
         for (Integer key : manager.getKeys()) {
             AlarmDataItem alarm = manager.get(key);
-            if (alarm != null) {
+            if (alarm != null && alarm.getIsActive()) {
                 mGeofenceList.add(new Geofence.Builder()
                         // Set the request ID of the geofence. This is a string to identify this
                         // geofence.
