@@ -20,6 +20,12 @@ public class DataManager {
     private Map<Integer, AlarmDataItem> mAlarmDataItems = new HashMap<>();
     private static DataManager manager;
 
+    private OnDataChangedListener listener;
+    public void setOnDataCHangedListener(OnDataChangedListener listener){
+        this.listener = listener;
+    }
+
+
     public static DataManager getInstance(String filesDir, String fileName){
         if(manager == null){
             manager = new DataManager(filesDir, fileName);
@@ -68,6 +74,12 @@ public class DataManager {
         save();
     }
 
+    private void notifyDataSetChanged(){
+        if(listener!=null){
+            listener.alarmDataChanged();
+        }
+    }
+
     public int addAlarm(LatLng coordinates, String address, int radius){
         AlarmDataItem alarm = new AlarmDataItem(getAvailableId());
         alarm.setCoordinates(coordinates);
@@ -107,6 +119,7 @@ public class DataManager {
         Gson gson = new Gson();
         String json = gson.toJson(mAlarmDataItems);
         fileReader.saveToFile(json);
+        notifyDataSetChanged();
     }
 
     public int numberOfAlarms() {

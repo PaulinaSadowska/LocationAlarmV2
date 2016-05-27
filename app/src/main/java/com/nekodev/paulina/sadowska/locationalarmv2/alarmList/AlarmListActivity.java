@@ -18,6 +18,8 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
+import com.nekodev.paulina.sadowska.locationalarmv2.data.AlarmDataItem;
+import com.nekodev.paulina.sadowska.locationalarmv2.data.DataManager;
 import com.nekodev.paulina.sadowska.locationalarmv2.geofences.GeofenceErrorMessages;
 import com.nekodev.paulina.sadowska.locationalarmv2.geofences.GeofenceTransitionsIntentService;
 
@@ -256,29 +258,36 @@ public class AlarmListActivity extends ActionBarActivity implements
      * the user's location.
      */
     public void populateGeofenceList() {
-        mGeofenceList.add(new Geofence.Builder()
-                // Set the request ID of the geofence. This is a string to identify this
-                // geofence.
-                .setRequestId("czarnkow")
+        DataManager manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
+        mGeofenceList.clear();
+        for (Integer key : manager.getKeys()) {
+            AlarmDataItem alarm = manager.get(key);
+            if (alarm != null) {
+                mGeofenceList.add(new Geofence.Builder()
+                        // Set the request ID of the geofence. This is a string to identify this
+                        // geofence.
+                        .setRequestId(alarm.getAddress())
 
-                // Set the circular region of this geofence.
-                .setCircularRegion(
-                        52.9018021,
-                        16.5649313,
-                        1000
-                )
+                        // Set the circular region of this geofence.
+                        .setCircularRegion(
+                                alarm.getCoordinates().latitude,
+                                alarm.getCoordinates().longitude,
+                                alarm.getRadiusInMeters()
+                        )
 
-                // Set the expiration duration of the geofence. This geofence gets automatically
-                // removed after this period of time.
-                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
+                        // Set the expiration duration of the geofence. This geofence gets automatically
+                        // removed after this period of time.
+                        .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
 
-                // Set the transition types of interest. Alerts are only generated for these
-                // transition. We track entry and exit transitions in this sample.
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                        Geofence.GEOFENCE_TRANSITION_EXIT)
+                        // Set the transition types of interest. Alerts are only generated for these
+                        // transition. We track entry and exit transitions in this sample.
+                        .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                                Geofence.GEOFENCE_TRANSITION_EXIT)
 
-                // Create the geofence.
-                .build());
+                        // Create the geofence.
+                        .build());
+            }
+        }
     }
 
 }
