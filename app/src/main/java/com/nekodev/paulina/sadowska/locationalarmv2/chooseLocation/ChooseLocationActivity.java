@@ -41,6 +41,7 @@ import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
 import com.nekodev.paulina.sadowska.locationalarmv2.Keys;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmDetailsActivity;
+import com.nekodev.paulina.sadowska.locationalarmv2.data.AlarmDataItem;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.DataManager;
 
 import java.io.IOException;
@@ -65,6 +66,7 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     private GoogleMap mMap;
     private PlaceAutocompleteFragment autocompleteFragment;
     private GoogleApiClient mGoogleApiClient;
+    private DataManager manager;
 
     private int alarmId = -1;
 
@@ -85,6 +87,16 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
         ButterKnife.bind(this);
         if(getIntent().hasExtra(Keys.ALARM_ID)){
             alarmId = getIntent().getIntExtra(Keys.ALARM_ID, alarmId);
+            manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
+            AlarmDataItem alarm = manager.get(alarmId);
+            if(alarm!=null){
+                pinLocalization = alarm.getCoordinates();
+                placeAddress = alarm.getAddress();
+                radius = alarm.getRadiusInMeters();
+            }
+            else{
+                alarmId = -1;
+            }
         }
 
         Resources res = getResources();
@@ -198,8 +210,10 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
         LocationRequest mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        if(placeAddress == null) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            }
         }
 
 
@@ -271,7 +285,6 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     }
 
     public void captureScreen() {
-        final DataManager manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
         if(alarmId<0) {
             alarmId = manager.addAlarm(pinLocalization, placeAddress, radius);
         }
