@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -41,7 +43,10 @@ import com.nekodev.paulina.sadowska.locationalarmv2.R;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmDetailsActivity;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.DataManager;
 
+import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -55,7 +60,7 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     private static final int FILL_COLOR = Color.argb(60, 0, 0, 0);
     private static final int STROKE_COLOR = Color.argb(200, 0, 0, 0);
     private LatLng pinLocalization = new LatLng(52.4034891, 16.946969); //assigned when phone localization not found
-    private String placeAddress = "";
+    private String placeAddress;
     private int radius = 1000;
     private GoogleMap mMap;
     private PlaceAutocompleteFragment autocompleteFragment;
@@ -245,6 +250,23 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
 
     @OnClick(R.id.choose_location_save)
     public void saveLocalization(View view) {
+        if(placeAddress == null){
+            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+            try {
+                List<Address> listAddresses = geocoder.getFromLocation(pinLocalization.latitude, pinLocalization.longitude, 1);
+                if(null!=listAddresses&&listAddresses.size()>0){
+                    Address address = listAddresses.get(0);
+                    placeAddress = "";
+                    for(int i=0; i<address.getMaxAddressLineIndex(); i++) {
+                        placeAddress += address.getAddressLine(i) + ", ";
+                    }
+                    placeAddress = placeAddress.substring(0, placeAddress.length()-2);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                placeAddress = "";
+            }
+        }
         captureScreen();
     }
 

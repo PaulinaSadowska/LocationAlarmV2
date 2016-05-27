@@ -40,6 +40,7 @@ public class AlarmDetailsActivity extends AppCompatActivity {
     Button saveButton;
     @Bind(R.id.alarm_details_cancel)
     Button cancelButton;
+    boolean isNewAlarm = true;
 
     private AlarmDetailsFragment alarmDetailsFragment = new AlarmDetailsFragment();
     private AlarmDataItem alarmData;
@@ -60,6 +61,7 @@ public class AlarmDetailsActivity extends AppCompatActivity {
         alarmData = manager.get(alarmId);
         if (alarmData != null) {
             if(alarmData.getAlarmTone() != null) {
+                isNewAlarm = false;
                 alarmDetailsFragment.setArguments(getAlarmDetailsArguments(
                         alarmData.getAlarmType(),
                         alarmData.getAlarmTone(),
@@ -93,7 +95,8 @@ public class AlarmDetailsActivity extends AppCompatActivity {
 
     private void cancelLocalization(){
         Intent intent = new Intent(this, AlarmListActivity.class);
-        manager.remove(alarmData.getAlarmId()); //TODO - FIX what when alarm is edited not created, then changes should be removed, not the whole alarm
+        if(isNewAlarm)
+            manager.remove(alarmData.getAlarmId());
         startActivity(intent);
     }
 
