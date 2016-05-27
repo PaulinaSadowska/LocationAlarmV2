@@ -16,14 +16,12 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 import com.nekodev.paulina.sadowska.locationalarmv2.geofences.GeofenceErrorMessages;
 import com.nekodev.paulina.sadowska.locationalarmv2.geofences.GeofenceTransitionsIntentService;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -60,8 +58,6 @@ public class AlarmListActivity extends ActionBarActivity implements
     private PendingIntent mGeofencePendingIntent;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,13 +88,13 @@ public class AlarmListActivity extends ActionBarActivity implements
 
     @OnClick(R.id.alarm_list_add_alarm_button)
     public void addAlarm(View view) {
-        if(!mGeofencesAdded)
+        if (!mGeofencesAdded)
             addGeofences();
-        else{
+        else {
             removeGeofences();
         }
-       // Intent intent = new Intent(this, ChooseLocationActivity.class);
-       // startActivity(intent);
+        // Intent intent = new Intent(this, ChooseLocationActivity.class);
+        // startActivity(intent);
     }
 
     @Override
@@ -211,7 +207,7 @@ public class AlarmListActivity extends ActionBarActivity implements
     /**
      * Runs when the result of calling addGeofences() and removeGeofences() becomes available.
      * Either method can complete successfully or with an error.
-     *
+     * <p/>
      * Since this activity implements the {@link ResultCallback} interface, we are required to
      * define this method.
      *
@@ -260,32 +256,29 @@ public class AlarmListActivity extends ActionBarActivity implements
      * the user's location.
      */
     public void populateGeofenceList() {
-        for (Map.Entry<String, LatLng> entry : Constants.BAY_AREA_LANDMARKS.entrySet()) {
+        mGeofenceList.add(new Geofence.Builder()
+                // Set the request ID of the geofence. This is a string to identify this
+                // geofence.
+                .setRequestId("czarnkow")
 
-            mGeofenceList.add(new Geofence.Builder()
-                    // Set the request ID of the geofence. This is a string to identify this
-                    // geofence.
-                    .setRequestId(entry.getKey())
+                // Set the circular region of this geofence.
+                .setCircularRegion(
+                        52.9018021,
+                        16.5649313,
+                        1000
+                )
 
-                    // Set the circular region of this geofence.
-                    .setCircularRegion(
-                            entry.getValue().latitude,
-                            entry.getValue().longitude,
-                            Constants.GEOFENCE_RADIUS_IN_METERS
-                    )
+                // Set the expiration duration of the geofence. This geofence gets automatically
+                // removed after this period of time.
+                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
 
-                    // Set the expiration duration of the geofence. This geofence gets automatically
-                    // removed after this period of time.
-                    .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
+                // Set the transition types of interest. Alerts are only generated for these
+                // transition. We track entry and exit transitions in this sample.
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                        Geofence.GEOFENCE_TRANSITION_EXIT)
 
-                    // Set the transition types of interest. Alerts are only generated for these
-                    // transition. We track entry and exit transitions in this sample.
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                            Geofence.GEOFENCE_TRANSITION_EXIT)
-
-                    // Create the geofence.
-                    .build());
-        }
+                // Create the geofence.
+                .build());
     }
 
 }
