@@ -23,22 +23,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
+import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmList.AlarmListActivity;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.AlarmDataItem;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.DataManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -91,7 +91,12 @@ public class GeofenceTransitionsIntentService extends IntentService {
             for (Geofence triggeringGeofence : triggeringGeofences) {
                 int alarmId = Integer.parseInt(triggeringGeofence.getRequestId());
                 AlarmDataItem alarm = manager.get(alarmId);
-                sendNotification(alarm);
+                if(alarm.getAlarmType() == AlarmTypes.NOTIFICATION) {
+                    sendNotification(alarm);
+                }
+                else{
+                    triggerAlarm(alarm);
+                }
             }
 
             // Send notification and log the transition details.
@@ -101,29 +106,19 @@ public class GeofenceTransitionsIntentService extends IntentService {
         }
     }
 
-    /**
-     * Gets transition details and returns them as a formatted string.
-     *
-     * @param context               The app context.
-     * @param geofenceTransition    The ID of the geofence transition.
-     * @param triggeringGeofences   The geofence(s) triggered.
-     * @return                      The transition details formatted as String.
-     */
-    private String getGeofenceTransitionDetails(
-            Context context,
-            int geofenceTransition,
-            List<Geofence> triggeringGeofences) {
-
-        String geofenceTransitionString = getTransitionString(geofenceTransition);
-
-        // Get the Ids of each geofence that was triggered.
-        ArrayList triggeringGeofencesIdsList = new ArrayList();
-        for (Geofence geofence : triggeringGeofences) {
-            triggeringGeofencesIdsList.add(geofence.getRequestId());
+    private void triggerAlarm(AlarmDataItem alarm){
+        try {
+            Uri sound;
+            if(alarm.getAlarmToneAddress() == null){
+                sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            }else{
+                sound = Uri.parse(alarm.getAlarmToneAddress());
+            }
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), sound);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        String triggeringGeofencesIdsString = TextUtils.join(", ",  triggeringGeofencesIdsList);
-
-        return geofenceTransitionString + ": " + triggeringGeofencesIdsString;
     }
 
     /**
@@ -178,22 +173,5 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
         // Issue the notification
         mNotificationManager.notify(0, builder.build());
-    }
-
-    /**
-     * Maps geofence transition types to their human-readable equivalents.
-     *
-     * @param transitionType    A transition type constant defined in Geofence
-     * @return                  A String indicating the type of transition
-     */
-    private String getTransitionString(int transitionType) {
-        switch (transitionType) {
-            case Geofence.GEOFENCE_TRANSITION_ENTER:
-                return getString(R.string.geofence_transition_entered);
-            case Geofence.GEOFENCE_TRANSITION_EXIT:
-                return getString(R.string.geofence_transition_exited);
-            default:
-                return getString(R.string.unknown_geofence_transition);
-        }
     }
 }

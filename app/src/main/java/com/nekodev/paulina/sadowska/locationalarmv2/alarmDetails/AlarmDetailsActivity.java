@@ -65,6 +65,7 @@ public class AlarmDetailsActivity extends AppCompatActivity {
                 alarmDetailsFragment.setArguments(getAlarmDetailsArguments(
                         alarmData.getAlarmType(),
                         alarmData.getAlarmTone(),
+                        alarmData.getAlarmToneAddress(),
                         alarmData.getRepeatDays()
                 ));
             }
@@ -119,7 +120,7 @@ public class AlarmDetailsActivity extends AppCompatActivity {
         alarmDetailsFragment.onActivityResult(requestCode, resultCode, data);
     }
 
-    public Bundle getAlarmDetailsArguments(AlarmTypes alarmType, String alarmTone, boolean[] repeatDays) {
+    public Bundle getAlarmDetailsArguments(AlarmTypes alarmType, String alarmTone, String alarmToneAddress, boolean[] repeatDays) {
         Bundle alarmDetailsArguments = new Bundle();
 
         if(alarmType==AlarmTypes.SOUND)
@@ -128,6 +129,9 @@ public class AlarmDetailsActivity extends AppCompatActivity {
             alarmDetailsArguments.putInt(Keys.AlarmDetailsKeys.ALARM_TYPE, Constants.ALARM_TYPE_NOTIFICATION_CODE);
 
         alarmDetailsArguments.putString(Keys.AlarmDetailsKeys.ALARM_TONE, alarmTone);
+        if(alarmToneAddress!=null) {
+            alarmDetailsArguments.putString(Keys.AlarmDetailsKeys.ALARM_TONE_ADDRESS, alarmToneAddress);
+        }
         alarmDetailsArguments.putSerializable(Keys.AlarmDetailsKeys.REPEAT_DAYS, repeatDays);
         return alarmDetailsArguments;
     }

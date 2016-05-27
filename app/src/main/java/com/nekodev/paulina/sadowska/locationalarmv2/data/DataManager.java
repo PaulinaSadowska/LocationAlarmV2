@@ -101,7 +101,9 @@ public class DataManager {
         AlarmDataItem item = mAlarmDataItems.get(alarmId);
         item.setAlarmType(alarmType);
         item.setAlarmTone(alarmTone);
-        item.setAlarmToneAddress(alarmSoundUri.toString());
+        if(alarmSoundUri!=null) {
+            item.setAlarmToneAddress(alarmSoundUri.toString());
+        }
         item.setRepeatDays(repeatDays);
         save();
     }

@@ -60,6 +60,9 @@ public class AlarmDetailsFragment extends Fragment {
     public void setArguments(Bundle args) {
         alarmType = args.getInt(Keys.AlarmDetailsKeys.ALARM_TYPE);
         alarmSound = args.getString(Keys.AlarmDetailsKeys.ALARM_TONE, alarmSound);
+        if(!args.getString(Keys.AlarmDetailsKeys.ALARM_TONE_ADDRESS, "").equals("")) {
+            alarmSoundUri = Uri.parse(args.getString(Keys.AlarmDetailsKeys.ALARM_TONE_ADDRESS, ""));
+        }
         repeatDays = args.getBooleanArray(Keys.AlarmDetailsKeys.REPEAT_DAYS);
     }
 
