@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
@@ -33,6 +32,7 @@ import android.util.Log;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
+import com.nekodev.paulina.sadowska.locationalarmv2.Keys;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmList.AlarmListActivity;
@@ -107,18 +107,12 @@ public class GeofenceTransitionsIntentService extends IntentService {
     }
 
     private void triggerAlarm(AlarmDataItem alarm){
-        try {
-            Uri sound;
-            if(alarm.getAlarmToneAddress() == null){
-                sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-            }else{
-                sound = Uri.parse(alarm.getAlarmToneAddress());
-            }
-            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), sound);
-            r.play();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Intent i = new Intent();
+        i.setClassName("com.nekodev.paulina.sadowska.locationalarmv2", "com.nekodev.paulina.sadowska.locationalarmv2.AlarmActivity");
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.putExtra(Keys.AlarmDetailsKeys.ALARM_LOCATION_ADDRESS, alarm.getAddress());
+        i.putExtra(Keys.AlarmDetailsKeys.ALARM_TONE_ADDRESS, alarm.getAlarmToneAddress());
+        getApplicationContext().startActivity(i);
     }
 
     /**

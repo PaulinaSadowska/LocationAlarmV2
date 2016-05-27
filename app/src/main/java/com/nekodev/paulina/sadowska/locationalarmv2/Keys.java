@@ -23,8 +23,8 @@ public final class Keys {
         public static final String ALARM_TONE = "alarmToneKey";
         public static final String REPEAT_DAYS = "repeatDays";
         public static final String ALARM_TONE_ADDRESS = "alarmToneAddress";
+        public static final String ALARM_LOCATION_ADDRESS = "alarmLocationAddress";
     }
-
 
     public static final String REPEAT_DAYS_KEY = "repeatDaysKey";
 }

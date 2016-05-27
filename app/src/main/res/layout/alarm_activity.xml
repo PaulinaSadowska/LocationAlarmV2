@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/half_transparent_black"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:src="@drawable/alarm_active_image"/>
+
+        <TextView
+            android:id="@+id/alarm_activity_address"
+            style="@style/Base.TextAppearance.AppCompat.Headline"
+            android:textColor="@color/white"
+            android:padding="16dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="os. Lecha 122/12, 61-299 Poznań"/>
+
+    </LinearLayout>
+
+
+
+
+
+    <Button
+        android:id="@+id/alarm_activity_cancelAlarm"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:text="@string/cancel"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:textSize="16sp" />
+
+
+</RelativeLayout>

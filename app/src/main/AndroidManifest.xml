@@ -46,15 +46,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".geofences.MainActivity"
-            android:label="@string/app_name">
-
-        </activity>
-
         <activity android:name=".alarmDetails.AlarmDetailsActivity"
             android:label="@string/app_name"
             android:theme="@style/AlarmDetailsTheme">
         </activity>
+
+        <activity android:name="com.nekodev.paulina.sadowska.locationalarmv2.AlarmActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
 
         <activity
             android:name=".chooseLocation.ChooseLocationActivity"

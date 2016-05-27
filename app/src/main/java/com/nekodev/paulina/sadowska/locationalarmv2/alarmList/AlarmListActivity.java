@@ -168,6 +168,8 @@ public class AlarmListActivity extends ActionBarActivity implements
             Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
             return;
         }
+        if(mGeofenceList.size()==0)
+            return;
 
         try {
             LocationServices.GeofencingApi.addGeofences(
