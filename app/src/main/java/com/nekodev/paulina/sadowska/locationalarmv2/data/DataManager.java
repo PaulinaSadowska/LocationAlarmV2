@@ -1,5 +1,7 @@
 package com.nekodev.paulina.sadowska.locationalarmv2.data;
 
+import android.net.Uri;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -94,11 +96,12 @@ public class DataManager {
         return mAlarmDataItems.get(alarmId);
     }
 
-    public void editAlarmDetails(int alarmId, AlarmTypes alarmType, String alarmTone, boolean[] repeatDays)
+    public void editAlarmDetails(int alarmId, AlarmTypes alarmType, String alarmTone, Uri alarmSoundUri, boolean[] repeatDays)
     {
         AlarmDataItem item = mAlarmDataItems.get(alarmId);
         item.setAlarmType(alarmType);
         item.setAlarmTone(alarmTone);
+        item.setAlarmToneAddress(alarmSoundUri.toString());
         item.setRepeatDays(repeatDays);
         save();
     }

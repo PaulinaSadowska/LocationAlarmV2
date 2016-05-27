@@ -16,6 +16,7 @@ public class AlarmDataItem {
     private int radiusInMeters;
     private AlarmTypes alarmType;
     private String alarmTone;
+    private String alarmToneAddress;
     private boolean[] repeatDays;
 
     public AlarmDataItem(int alarmId) {
@@ -92,6 +93,14 @@ public class AlarmDataItem {
 
     public void setRepeatDays(boolean[] repeatDays) {
         this.repeatDays = repeatDays;
+    }
+
+    public String getAlarmToneAddress() {
+        return alarmToneAddress;
+    }
+
+    public void setAlarmToneAddress(String alarmToneAddress) {
+        this.alarmToneAddress = alarmToneAddress;
     }
 }
 

@@ -32,8 +32,11 @@ import android.util.Log;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
+import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmList.AlarmListActivity;
+import com.nekodev.paulina.sadowska.locationalarmv2.data.AlarmDataItem;
+import com.nekodev.paulina.sadowska.locationalarmv2.data.DataManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,27 +80,21 @@ public class GeofenceTransitionsIntentService extends IntentService {
             Log.e(TAG, errorMessage);
             return;
         }
-
         // Get the transition type.
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
         // Test that the reported transition was of interest.
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
-                geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
-
+        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
+            DataManager manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
             // Get the geofences that were triggered. A single event can trigger multiple geofences.
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
-
-            // Get the transition details as a String.
-            String geofenceTransitionDetails = getGeofenceTransitionDetails(
-                    this,
-                    geofenceTransition,
-                    triggeringGeofences
-            );
+            for (Geofence triggeringGeofence : triggeringGeofences) {
+                int alarmId = Integer.parseInt(triggeringGeofence.getRequestId());
+                AlarmDataItem alarm = manager.get(alarmId);
+                sendNotification(alarm);
+            }
 
             // Send notification and log the transition details.
-            sendNotification(geofenceTransitionDetails);
-            Log.i(TAG, geofenceTransitionDetails);
         } else {
             // Log the error.
             Log.e(TAG, getString(R.string.geofence_transition_invalid_type, geofenceTransition));
@@ -133,7 +130,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
      * Posts a notification in the notification bar when a transition is detected.
      * If the user clicks the notification, control goes to the MainActivity.
      */
-    private void sendNotification(String notificationDetails) {
+    private void sendNotification(AlarmDataItem alarm) {
         // Create an explicit content Intent that starts the main Activity.
         Intent notificationIntent = new Intent(getApplicationContext(), AlarmListActivity.class);
 
@@ -152,8 +149,14 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
         // Get a notification builder that's compatible with platform versions >= 4
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        Uri sound;
+        if(alarm.getAlarmToneAddress() == null){
+            sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        }
+        else{
+            sound = Uri.parse(alarm.getAlarmToneAddress());
+        }
 
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         // Define the notification settings.
         builder.setSmallIcon(R.drawable.ic_mode_edit_black_24dp)
                 // In a real app, you may want to use a library like Volley
@@ -161,8 +164,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),
                         R.drawable.ic_mode_edit_black_24dp))
                 .setColor(Color.RED)
-                .setSound(alarmSound)
-                .setContentTitle(notificationDetails)
+                .setSound(sound)
+                .setContentTitle(alarm.getAddress())
                 .setContentText(getString(R.string.geofence_transition_notification_text))
                 .setContentIntent(notificationPendingIntent);
 

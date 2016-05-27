@@ -83,7 +83,7 @@ public class AlarmDetailsActivity extends AppCompatActivity {
     public void saveLocalization(View view) {
         Intent intent = new Intent(this, AlarmListActivity.class);
         manager.editAlarmDetails(alarmData.getAlarmId(), alarmDetailsFragment.getAlarmType(),
-                alarmDetailsFragment.getAlarmSound(), alarmDetailsFragment.getRepeatDays());
+                alarmDetailsFragment.getAlarmSound(), alarmDetailsFragment.getAlarmSoundUri(), alarmDetailsFragment.getRepeatDays());
         //save data in manager
         startActivity(intent);
     }
@@ -109,7 +109,7 @@ public class AlarmDetailsActivity extends AppCompatActivity {
     public void onEditLocationButtonClick() {
         Intent intent = new Intent(this, ChooseLocationActivity.class);
         manager.editAlarmDetails(alarmData.getAlarmId(), alarmDetailsFragment.getAlarmType(),
-                alarmDetailsFragment.getAlarmSound(), alarmDetailsFragment.getRepeatDays());
+                alarmDetailsFragment.getAlarmSound(), alarmDetailsFragment.getAlarmSoundUri(), alarmDetailsFragment.getRepeatDays());
         intent.putExtra(Keys.ALARM_ID, alarmData.getAlarmId());
         startActivity(intent);
     }

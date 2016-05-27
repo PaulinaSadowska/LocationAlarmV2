@@ -262,7 +262,7 @@ public class AlarmListActivity extends ActionBarActivity implements
                 mGeofenceList.add(new Geofence.Builder()
                         // Set the request ID of the geofence. This is a string to identify this
                         // geofence.
-                        .setRequestId(alarm.getAddress())
+                        .setRequestId(alarm.getAlarmId()+"")
 
                         // Set the circular region of this geofence.
                         .setCircularRegion(
@@ -277,8 +277,7 @@ public class AlarmListActivity extends ActionBarActivity implements
 
                         // Set the transition types of interest. Alerts are only generated for these
                         // transition. We track entry and exit transitions in this sample.
-                        .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                                Geofence.GEOFENCE_TRANSITION_EXIT)
+                        .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
 
                         // Create the geofence.
                         .build());

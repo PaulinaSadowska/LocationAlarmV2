@@ -28,6 +28,7 @@ public class AlarmDetailsFragment extends Fragment {
     private AlarmDetailsItem alarmRepeatingFragment = new AlarmDetailsItem();
     private int alarmType = Constants.ALARM_TYPE_SOUND_CODE;
     private String alarmSound;
+    private Uri alarmSoundUri;
     private boolean[] repeatDays = new boolean[]{false, false, false, false, false, false, false};
 
 
@@ -40,6 +41,10 @@ public class AlarmDetailsFragment extends Fragment {
 
     public String getAlarmSound(){
         return alarmSound;
+    }
+
+    public Uri getAlarmSoundUri(){
+        return alarmSoundUri;
     }
 
     public boolean[] getRepeatDays(){
@@ -75,15 +80,14 @@ public class AlarmDetailsFragment extends Fragment {
         alarmTypeFragment.setOnSpinnerSelectionChangedListener(new AlarmDetailsItemSpinner.SpinnerSelectionChangedListener() {
             @Override
             public void onSpinnerSelectionChanged(int position) {
-                Uri defaultRingtoneUri;
                 alarmType = position;
                 if(position==Constants.ALARM_TYPE_SOUND_CODE) {
-                    defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
+                    alarmSoundUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
                 }
                 else{
-                    defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_NOTIFICATION);
+                    alarmSoundUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_NOTIFICATION);
                 }
-                Ringtone defaultRingtone = RingtoneManager.getRingtone(getActivity(), defaultRingtoneUri);
+                Ringtone defaultRingtone = RingtoneManager.getRingtone(getActivity(), alarmSoundUri);
                 alarmSound = defaultRingtone.getTitle(getActivity());
                 alarmSoundFragment.setOptionText(alarmSound);
             }
@@ -139,9 +143,9 @@ public class AlarmDetailsFragment extends Fragment {
         switch(requestCode){
             case Keys.ActivityResultKeys.SELECT_SOUND_REQUEST_CODE:
                 if(resultCode== Activity.RESULT_OK) {
-                    Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-                    if (uri != null) {
-                        Ringtone ringtone = RingtoneManager.getRingtone(getActivity(), uri);
+                    alarmSoundUri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                    if (alarmSoundUri != null) {
+                        Ringtone ringtone = RingtoneManager.getRingtone(getActivity(), alarmSoundUri);
                         alarmSound = ringtone.getTitle(getActivity());
                         alarmSoundFragment.setOptionText(alarmSound);
                     }
