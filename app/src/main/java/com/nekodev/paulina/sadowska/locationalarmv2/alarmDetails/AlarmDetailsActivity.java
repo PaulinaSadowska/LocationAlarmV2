@@ -58,10 +58,17 @@ public class AlarmDetailsActivity extends AppCompatActivity {
         manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
         int alarmId = getIntent().getIntExtra(Keys.ALARM_ID, 0);
         alarmData = manager.get(alarmId);
-        if(alarmData != null){
+        if (alarmData != null) {
+            if(alarmData.getAlarmTone() != null) {
+                alarmDetailsFragment.setArguments(getAlarmDetailsArguments(
+                        alarmData.getAlarmType(),
+                        alarmData.getAlarmTone(),
+                        alarmData.getRepeatDays()
+                ));
+            }
             alarmTitle.setText(alarmData.getAddress());
-            Bitmap iconBitmap = BitmapFactory.decodeFile(getFilesDir().getPath()+"/"+alarmData.getImageName());
-            if(iconBitmap!=null) {
+            Bitmap iconBitmap = BitmapFactory.decodeFile(getFilesDir().getPath() + "/" + alarmData.getImageName());
+            if (iconBitmap != null) {
                 mapPreview.setImageBitmap(iconBitmap);
             }
         }
@@ -80,7 +87,11 @@ public class AlarmDetailsActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.alarm_details_cancel)
-    public void cancelLocalization(View view) {
+    public void cancel(View view) {
+        cancelLocalization();
+    }
+
+    private void cancelLocalization(){
         Intent intent = new Intent(this, AlarmListActivity.class);
         manager.remove(alarmData.getAlarmId()); //TODO - FIX what when alarm is edited not created, then changes should be removed, not the whole alarm
         startActivity(intent);
@@ -88,17 +99,33 @@ public class AlarmDetailsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        cancelLocalization();
     }
 
     @OnClick (R.id.alarm_details_edit_location_button)
     public void onEditLocationButtonClick() {
         Intent intent = new Intent(this, ChooseLocationActivity.class);
+        manager.editAlarmDetails(alarmData.getAlarmId(), alarmDetailsFragment.getAlarmType(),
+                alarmDetailsFragment.getAlarmSound(), alarmDetailsFragment.getRepeatDays());
+        intent.putExtra(Keys.ALARM_ID, alarmData.getAlarmId());
         startActivity(intent);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         alarmDetailsFragment.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public Bundle getAlarmDetailsArguments(AlarmTypes alarmType, String alarmTone, boolean[] repeatDays) {
+        Bundle alarmDetailsArguments = new Bundle();
+
+        if(alarmType==AlarmTypes.SOUND)
+            alarmDetailsArguments.putInt(Keys.AlarmDetailsKeys.ALARM_TYPE, Constants.ALARM_TYPE_SOUND_CODE);
+        else
+            alarmDetailsArguments.putInt(Keys.AlarmDetailsKeys.ALARM_TYPE, Constants.ALARM_TYPE_NOTIFICATION_CODE);
+
+        alarmDetailsArguments.putString(Keys.AlarmDetailsKeys.ALARM_TONE, alarmTone);
+        alarmDetailsArguments.putSerializable(Keys.AlarmDetailsKeys.REPEAT_DAYS, repeatDays);
+        return alarmDetailsArguments;
     }
 }

@@ -12,10 +12,18 @@ public final class Keys {
         public static final int SELECT_DAYS_REQUEST_CODE = 444;
     }
 
+    //used in alarm details fragment to pass data to nested fragments
     public final class AlarmDetailsItemKeys {
         public static final String ITEM_TITLE_KEY = "itemTitleKey";
         public static final String ITEM_OPTION_KEY = "itemOptionKey";
     }
+
+    public final class AlarmDetailsKeys {
+        public static final String ALARM_TYPE = "alarmTypeKey";
+        public static final String ALARM_TONE = "alarmToneKey";
+        public static final String REPEAT_DAYS = "repeatDays";
+    }
+
 
     public static final String REPEAT_DAYS_KEY = "repeatDaysKey";
 }

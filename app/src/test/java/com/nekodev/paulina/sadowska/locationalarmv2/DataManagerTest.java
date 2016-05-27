@@ -83,7 +83,7 @@ public class DataManagerTest {
         manager.editAlarmDetails(alarmId, alarmType, alarmTone, repeatDays);
         AlarmDataItem alarm1 = manager.get(alarmId);
         String otherLocation = "other location";
-        alarm1.setLocation(otherLocation);
+        alarm1.setAddress(otherLocation);
         AlarmDataItem alarm = manager.get(alarmId);
 
         assertNotNull(alarm);

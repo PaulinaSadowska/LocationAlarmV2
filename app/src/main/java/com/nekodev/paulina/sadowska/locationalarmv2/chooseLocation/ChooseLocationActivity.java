@@ -61,6 +61,8 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     private PlaceAutocompleteFragment autocompleteFragment;
     private GoogleApiClient mGoogleApiClient;
 
+    private int alarmId = -1;
+
     @Bind(R.id.choose_location_radius_label)
     TextView radiusLabel;
     @Bind(R.id.choose_location_radius_seekbar)
@@ -76,6 +78,9 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_location);
         ButterKnife.bind(this);
+        if(getIntent().hasExtra(Keys.ALARM_ID)){
+            alarmId = getIntent().getIntExtra(Keys.ALARM_ID, alarmId);
+        }
 
         Resources res = getResources();
         saveButton.setText(res.getString(R.string.save));
@@ -245,7 +250,12 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
 
     public void captureScreen() {
         final DataManager manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
-        final int alarmId = manager.addAlarm(pinLocalization, placeAddress, radius);
+        if(alarmId<0) {
+            alarmId = manager.addAlarm(pinLocalization, placeAddress, radius);
+        }
+        else{
+            manager.editAlarmLocation(alarmId, pinLocalization, placeAddress, radius);
+        }
         GoogleMap.SnapshotReadyCallback callback = new GoogleMap.SnapshotReadyCallback() {
 
             @Override

@@ -52,6 +52,10 @@ public class AlarmDetailsItemSpinner extends Fragment {
         }
     }
 
+    public void setItemSelected(int itemNumber){
+        this.itemSelected = itemNumber;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.alarm_details_item_spinner, container, false);
@@ -61,6 +65,9 @@ public class AlarmDetailsItemSpinner extends Fragment {
                 R.layout.spinner_list_item, itemOptions);
         adapter.setDropDownViewResource(R.layout.spinner_list_item);
         this.option.setAdapter(adapter);
+        if(itemSelected>-1){
+            this.option.setSelection(itemSelected);
+        }
         this.option.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

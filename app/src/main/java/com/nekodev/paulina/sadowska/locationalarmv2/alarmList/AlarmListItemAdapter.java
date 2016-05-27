@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nekodev.paulina.sadowska.locationalarmv2.Keys;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 import com.nekodev.paulina.sadowska.locationalarmv2.Utilities;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmDetailsActivity;
@@ -79,6 +80,7 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
             @Override
             public void onCardClicked(int pos) {
                 Intent intent = new Intent(mActivity, AlarmDetailsActivity.class);
+                intent.putExtra(Keys.ALARM_ID, getAlarmId(pos));
                 mActivity.startActivity(intent);
             }
 

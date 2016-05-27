@@ -28,7 +28,7 @@ public class AlarmDataItem {
         this.isActive = isActive;
     }
 
-    public void setLocation(String location) {
+    public void setAddress(String location) {
         this.address = location;
     }
 

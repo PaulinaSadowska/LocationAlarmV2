@@ -59,7 +59,7 @@ public class DataManager {
         item.setIsActive(true);
         item.setRadiusInMeters(3000);
         item.setAlarmType(AlarmTypes.NOTIFICATION);
-        item.setLocation("London");
+        item.setAddress("London");
          item.setRepeatDays(new boolean[]{true, false, false, true, false, true, false});
         item.setCoordinates(new LatLng(1.33, 14.32));
 
@@ -71,7 +71,7 @@ public class DataManager {
     public int addAlarm(LatLng coordinates, String address, int radius){
         AlarmDataItem alarm = new AlarmDataItem(getAvailableId());
         alarm.setCoordinates(coordinates);
-        alarm.setLocation(address);
+        alarm.setAddress(address);
         alarm.setRadiusInMeters(radius);
         mAlarmDataItems.put(alarm.getAlarmId(), alarm);
         save();
@@ -119,5 +119,13 @@ public class DataManager {
 
     public Set<Integer> getKeys() {
         return mAlarmDataItems.keySet();
+    }
+
+    public void editAlarmLocation(int alarmId, LatLng localization, String address, int radius) {
+        AlarmDataItem item = mAlarmDataItems.get(alarmId);
+        item.setCoordinates(localization);
+        item.setAddress(address);
+        item.setRadiusInMeters(radius);
+        save();
     }
 }

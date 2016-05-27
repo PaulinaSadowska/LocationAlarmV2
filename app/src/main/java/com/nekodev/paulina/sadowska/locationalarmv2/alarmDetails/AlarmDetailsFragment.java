@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
 import com.nekodev.paulina.sadowska.locationalarmv2.Keys;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 import com.nekodev.paulina.sadowska.locationalarmv2.Utilities;
@@ -25,13 +26,16 @@ public class AlarmDetailsFragment extends Fragment {
     private AlarmDetailsItemSpinner alarmTypeFragment = new AlarmDetailsItemSpinner();
     private AlarmDetailsItem alarmSoundFragment = new AlarmDetailsItem();
     private AlarmDetailsItem alarmRepeatingFragment = new AlarmDetailsItem();
-    private AlarmTypes alarmType = AlarmTypes.SOUND;
-    private String alarmSound = "";
+    private int alarmType = Constants.ALARM_TYPE_SOUND_CODE;
+    private String alarmSound;
     private boolean[] repeatDays = new boolean[]{false, false, false, false, false, false, false};
 
 
     public AlarmTypes getAlarmType(){
-        return alarmType;
+        if(alarmType == Constants.ALARM_TYPE_SOUND_CODE)
+            return AlarmTypes.SOUND;
+
+        return AlarmTypes.NOTIFICATION;
     }
 
     public String getAlarmSound(){
@@ -48,6 +52,13 @@ public class AlarmDetailsFragment extends Fragment {
     }
 
     @Override
+    public void setArguments(Bundle args) {
+        alarmType = args.getInt(Keys.AlarmDetailsKeys.ALARM_TYPE);
+        alarmSound = args.getString(Keys.AlarmDetailsKeys.ALARM_TONE, alarmSound);
+        repeatDays = args.getBooleanArray(Keys.AlarmDetailsKeys.REPEAT_DAYS);
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -60,17 +71,16 @@ public class AlarmDetailsFragment extends Fragment {
         Resources res = getResources();
 
         alarmTypeFragment.setArguments(getAlarmTypeArg(res.getString(R.string.alarm_type), res.getStringArray(R.array.alarm_types_list)));
+        alarmTypeFragment.setItemSelected(alarmType);
         alarmTypeFragment.setOnSpinnerSelectionChangedListener(new AlarmDetailsItemSpinner.SpinnerSelectionChangedListener() {
             @Override
             public void onSpinnerSelectionChanged(int position) {
                 Uri defaultRingtoneUri;
-                if(position==0) { //TODO - alarm type indexes hardcoded - uglyyy!
-                    alarmType = AlarmTypes.SOUND;
+                alarmType = position;
+                if(position==Constants.ALARM_TYPE_SOUND_CODE) {
                     defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
-
                 }
                 else{
-                    alarmType = AlarmTypes.NOTIFICATION;
                     defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_NOTIFICATION);
                 }
                 Ringtone defaultRingtone = RingtoneManager.getRingtone(getActivity(), defaultRingtoneUri);
@@ -78,25 +88,25 @@ public class AlarmDetailsFragment extends Fragment {
                 alarmSoundFragment.setOptionText(alarmSound);
             }
         });
+        if(alarmSound==null) {
+            Uri defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
+            Ringtone defaultRingtone = RingtoneManager.getRingtone(getActivity(), defaultRingtoneUri);
+            alarmSound = defaultRingtone.getTitle(getActivity());
 
-        Uri defaultRintoneUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
-        Ringtone defaultRingtone = RingtoneManager.getRingtone(getActivity(), defaultRintoneUri);
-
-        alarmSoundFragment.setArguments(getAlarmArg(res.getString(R.string.alarm_tone), defaultRingtone.getTitle(getActivity())));
+        }
+        alarmSoundFragment.setArguments(getAlarmArg(res.getString(R.string.alarm_tone), alarmSound));
         alarmSoundFragment.setOnItemClickedListener(new AlarmDetailsItem.ItemClickedListener() {
             @Override
             public void onItemClicked() {
-                if(alarmType==AlarmTypes.SOUND) {
-                    alarmType = AlarmTypes.SOUND;
+                if(alarmType==Constants.ALARM_TYPE_SOUND_CODE) {
                     startSoundPickerActivity(RingtoneManager.TYPE_ALARM);
                 }
-                else if(alarmType == AlarmTypes.NOTIFICATION) {
-                    alarmType = AlarmTypes.NOTIFICATION;
+                else{
                     startSoundPickerActivity(RingtoneManager.TYPE_NOTIFICATION);
                 }
             }
         });
-        alarmRepeatingFragment.setArguments(getAlarmArg(res.getString(R.string.repeat_weekly_title) + ":", res.getString(R.string.day_none)));
+        alarmRepeatingFragment.setArguments(getAlarmArg(res.getString(R.string.repeat_weekly_title) + ":", Utilities.getActiveDaysString(res, repeatDays)));
         alarmRepeatingFragment.setOnItemClickedListener(new AlarmDetailsItem.ItemClickedListener() {
             @Override
             public void onItemClicked() {
