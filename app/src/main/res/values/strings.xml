@@ -55,5 +55,6 @@
     <string name="unknown_geofence_transition">Unknown Transition</string>
 
     <string name="geofence_transition_notification_text">Click notification to return to app</string>
+    <string name="empty_alarm_list_message">Alarm list is empty. \n Click + button to add new alarm.</string>
 
 </resources>

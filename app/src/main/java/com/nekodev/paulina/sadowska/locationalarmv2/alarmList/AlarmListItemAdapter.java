@@ -26,8 +26,13 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
     private AlarmViewHolder mAlarmViewHolder;
     private Activity mActivity;
     private boolean onBind;
+    private boolean wasEmpty = true;
 
     private HashMap<Integer, Integer> alarmIds = new HashMap<>();
+    private OnEmptyAdapterListener listener;
+    public void setOnEmptyAdapterListener(OnEmptyAdapterListener listener){
+        this.listener = listener;
+    }
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public AlarmListItemAdapter(String path, String fileName, Activity mActivity) {
@@ -58,6 +63,9 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
     public void remove(int position) {
         manager.remove(getAlarmId(position));
         updateKeyMap();
+        if(manager.numberOfAlarms()==0 && listener != null){
+            listener.adapterBecomeEmpty();
+        }
         if(!onBind){
             notifyDataSetChanged();
         }

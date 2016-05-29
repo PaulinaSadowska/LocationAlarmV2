@@ -12,12 +12,19 @@ import android.view.ViewGroup;
 import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by Paulina Sadowska on 08.05.2016.
  */
 public class AlarmListFragment extends Fragment {
 
-    private RecyclerView mAlarmRecyclerView;
+    @Bind(R.id.fragment_alarm_list_recycler_view)
+    RecyclerView mAlarmRecyclerView;
+    @Bind(R.id.fragment_alarm_list_empty)
+    View emptyView;
+
     private AlarmListItemAdapter mAlarmListAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -29,7 +36,7 @@ public class AlarmListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAlarmRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_alarm_list_recycler_view);
+        ButterKnife.bind(this, view);
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -40,6 +47,28 @@ public class AlarmListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mAlarmListAdapter = new AlarmListItemAdapter(getActivity().getFilesDir().getPath(), Constants.FILE_NAME, getActivity());
+        if(mAlarmListAdapter.getItemCount()==0){
+            showEmptyView();
+        }
+        else{
+            hideEmptyView();
+        }
+        mAlarmListAdapter.setOnEmptyAdapterListener(new OnEmptyAdapterListener() {
+            @Override
+            public void adapterBecomeEmpty() {
+                showEmptyView();
+            }
+        });
         mAlarmRecyclerView.setAdapter(mAlarmListAdapter);
+    }
+
+    public void hideEmptyView(){
+        emptyView.setVisibility(View.GONE);
+        mAlarmRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    public void showEmptyView(){
+        emptyView.setVisibility(View.VISIBLE);
+        mAlarmRecyclerView.setVisibility(View.GONE);
     }
 }
