@@ -1,6 +1,7 @@
 package com.nekodev.paulina.sadowska.locationalarmv2.chooseLocation;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -86,15 +88,14 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
         setContentView(R.layout.activity_choose_location);
         ButterKnife.bind(this);
         manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
-        if(getIntent().hasExtra(Keys.ALARM_ID)){
+        if (getIntent().hasExtra(Keys.ALARM_ID)) {
             alarmId = getIntent().getIntExtra(Keys.ALARM_ID, alarmId);
             AlarmDataItem alarm = manager.get(alarmId);
-            if(alarm!=null){
+            if (alarm != null) {
                 pinLocalization = alarm.getCoordinates();
                 placeAddress = alarm.getAddress();
                 radius = alarm.getRadiusInMeters();
-            }
-            else{
+            } else {
                 alarmId = -1;
             }
         }
@@ -107,6 +108,11 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
                 .findFragmentById(R.id.choose_location_map);
         autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.choose_location_place_autocomplete_fragment);
+        if(placeAddress.isEmpty()) {
+            placeAddress = getPlaceAddress(pinLocalization);
+        }
+        if (!placeAddress.isEmpty())
+            autocompleteFragment.setText(placeAddress);
 
         mapFragment.getMapAsync(this);
         BuildGoogleApiClient();
@@ -134,8 +140,6 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        //outState.put(Keys.LocationData.COORDINATES, locationData.getCoordinates());
-
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
@@ -210,13 +214,11 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
         LocationRequest mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
-        if(placeAddress == null) {
+        if (placeAddress == null) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
             }
         }
-
-
     }
 
     @Override
@@ -246,9 +248,11 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
 
     @Override
     public void onLocationChanged(Location location) {
-        LatLng placeLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        pinLocalization = placeLatLng;
+        pinLocalization = new LatLng(location.getLatitude(), location.getLongitude());
         updateMap(true);
+        placeAddress = getPlaceAddress(pinLocalization);
+        if (!placeAddress.isEmpty())
+            autocompleteFragment.setText(placeAddress);
         stopLocationUpdates();
     }
 
@@ -264,31 +268,52 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
 
     @OnClick(R.id.choose_location_save)
     public void saveLocalization(View view) {
-        if(placeAddress == null){
-            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-            try {
-                List<Address> listAddresses = geocoder.getFromLocation(pinLocalization.latitude, pinLocalization.longitude, 1);
-                if(null!=listAddresses&&listAddresses.size()>0){
-                    Address address = listAddresses.get(0);
-                    placeAddress = "";
-                    for(int i=0; i<address.getMaxAddressLineIndex(); i++) {
-                        placeAddress += address.getAddressLine(i) + ", ";
-                    }
-                    placeAddress = placeAddress.substring(0, placeAddress.length()-2);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                placeAddress = "";
-            }
+        if (placeAddress == null) {
+            placeAddress = getPlaceAddress(pinLocalization);
         }
-        captureScreen();
+        if (placeAddress.isEmpty()) {
+            showErrorMessage();
+        } else {
+            captureScreen();
+        }
+    }
+
+    private void showErrorMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.location_not_found_message)
+                .setTitle(R.string.location_not_found_title);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private String getPlaceAddress(LatLng coordinates) {
+        String placeAddress = "";
+        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+        try {
+            List<Address> listAddresses = geocoder.getFromLocation(coordinates.latitude, coordinates.longitude, 1);
+            if (null != listAddresses && listAddresses.size() > 0) {
+                Address address = listAddresses.get(0);
+                for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                    placeAddress += address.getAddressLine(i) + ", ";
+                }
+                placeAddress = placeAddress.substring(0, placeAddress.length() - 2);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            placeAddress = "";
+        }
+        return placeAddress;
     }
 
     public void captureScreen() {
-        if(alarmId<0) {
+        if (alarmId < 0) {
             alarmId = manager.addAlarm(pinLocalization, placeAddress, radius);
-        }
-        else{
+        } else {
             manager.editAlarmLocation(alarmId, pinLocalization, placeAddress, radius);
         }
         GoogleMap.SnapshotReadyCallback callback = new GoogleMap.SnapshotReadyCallback() {

@@ -9,7 +9,7 @@ import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
 public class AlarmDataItem {
 
     private int alarmId;
-    private boolean isActive;
+    private boolean isActive = true;
     private double latitude;
     private double longitude;
     private String address;
@@ -101,6 +101,15 @@ public class AlarmDataItem {
 
     public void setAlarmToneAddress(String alarmToneAddress) {
         this.alarmToneAddress = alarmToneAddress;
+    }
+
+    public int getRepeatDaysCount() {
+        int repeatDaysCount = 0;
+        for (boolean day : repeatDays) {
+            if(day)
+                repeatDaysCount++;
+        }
+        return repeatDaysCount;
     }
 }
 

@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
@@ -40,6 +41,7 @@ public class AlarmListActivity extends ActionBarActivity implements
     private static final String TAG = "AlarmListActivity";
     @Bind(R.id.alarm_list_add_alarm_button)
     FloatingActionButton addAlarmButton;
+    AlarmListFragment alarmListFragment = new AlarmListFragment();
 
     /**
      * Provides the entry point to Google Play services.
@@ -64,6 +66,10 @@ public class AlarmListActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_list);
         ButterKnife.bind(this);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.alarm_list_fragment, alarmListFragment);
+        transaction.commit();
 
         // Empty list for storing geofences.
         mGeofenceList = new ArrayList<>();

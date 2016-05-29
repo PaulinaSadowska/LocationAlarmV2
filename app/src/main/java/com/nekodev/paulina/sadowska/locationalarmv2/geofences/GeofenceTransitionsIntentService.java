@@ -94,9 +94,17 @@ public class GeofenceTransitionsIntentService extends IntentService {
                 int alarmId = Integer.parseInt(triggeringGeofence.getRequestId());
                 if (previousAlarmId != alarmId) {
                     AlarmDataItem alarm = manager.get(alarmId);
-                    Calendar today = Calendar.getInstance();
-                    int dayOfWeek = (today.get(Calendar.DAY_OF_WEEK) + 5) % 7;
-                    if (alarm.getRepeatDays()[dayOfWeek]) {
+                    boolean trigger;
+                    if(alarm.getRepeatDaysCount()==0){
+                        manager.editAlarmIsActive(alarm.getAlarmId(), false);
+                        trigger = true;
+                    }
+                    else {
+                        Calendar today = Calendar.getInstance();
+                        int dayOfWeek = (today.get(Calendar.DAY_OF_WEEK) + 5) % 7;
+                        trigger = alarm.getRepeatDays()[dayOfWeek];
+                    }
+                    if (trigger) {
                         if (alarm.getAlarmType() == AlarmTypes.NOTIFICATION) {
                             sendNotification(alarm);
                         } else {

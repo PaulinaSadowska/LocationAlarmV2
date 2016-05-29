@@ -26,7 +26,6 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
     private AlarmViewHolder mAlarmViewHolder;
     private Activity mActivity;
     private boolean onBind;
-    private boolean wasEmpty = true;
 
     private HashMap<Integer, Integer> alarmIds = new HashMap<>();
     private OnEmptyAdapterListener listener;
@@ -126,5 +125,9 @@ public class AlarmListItemAdapter extends RecyclerView.Adapter<AlarmViewHolder> 
     @Override
     public int getItemCount() {
         return manager.numberOfAlarms();
+    }
+
+    public boolean onBind() {
+        return onBind;
     }
 }

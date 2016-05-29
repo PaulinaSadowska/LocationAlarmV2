@@ -1,8 +1,8 @@
 package com.nekodev.paulina.sadowska.locationalarmv2.alarmList;
 
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -66,6 +66,7 @@ public class AlarmListFragment extends Fragment {
         emptyView.setVisibility(View.GONE);
         mAlarmRecyclerView.setVisibility(View.VISIBLE);
     }
+
 
     public void showEmptyView(){
         emptyView.setVisibility(View.VISIBLE);
