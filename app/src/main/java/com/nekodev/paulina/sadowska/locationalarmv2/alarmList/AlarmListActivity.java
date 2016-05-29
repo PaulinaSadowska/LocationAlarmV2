@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -60,6 +62,14 @@ public class AlarmListActivity extends ActionBarActivity implements
 
     private DataManager manager;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Window wind = this.getWindow();
+        wind.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        wind.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        wind.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

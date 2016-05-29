@@ -22,7 +22,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
@@ -164,12 +163,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
         }
 
         // Define the notification settings.
-        builder.setSmallIcon(R.drawable.ic_mode_edit_black_24dp)
-                // In a real app, you may want to use a library like Volley
-                // to decode the Bitmap.
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                        R.drawable.ic_mode_edit_black_24dp))
-                .setColor(Color.RED)
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),
+                        R.mipmap.ic_launcher))
                 .setSound(sound)
                 .setContentTitle(alarm.getAddress())
                 .setContentText(getString(R.string.geofence_transition_notification_text))

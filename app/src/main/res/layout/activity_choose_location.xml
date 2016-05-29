@@ -18,7 +18,7 @@
         android:layout_gravity="bottom"
         android:orientation="vertical">
 
-        <FrameLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginBottom="-8dp"
@@ -27,36 +27,51 @@
             android:orientation="horizontal"
             android:textAlignment="center">
 
-            <TextView
-                android:id="@+id/choose_location_radius_label"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="7dp"
-                android:background="@color/half_transparent_black"
-                android:fontFamily="sans-serif"
-                android:gravity="start|center_vertical"
-                android:paddingStart="24dp"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                tools:text="promień" />
+                android:layout_height="56dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/half_transparent_black">
+            </View>
 
-            <com.appyvet.rangebar.RangeBar xmlns:custom="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/choose_location_radius_seekbar"
-                android:layout_width="280dp"
-                android:layout_height="100dp"
-                android:layout_gravity="bottom|end"
-                custom:pinMaxFont="14dp"
-                custom:pinPadding="4dp"
-                custom:pinRadius="24dp"
-                custom:rangeBar="false"
-                custom:tickColor="@color/transparent"
-                custom:tickEnd="5000"
-                custom:tickInterval="50"
-                custom:tickStart="0" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/choose_location_radius_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="7dp"
+                    android:fontFamily="sans-serif"
+                    android:gravity="start|center_vertical"
+                    android:paddingStart="24dp"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:text="promień" />
+
+                <com.appyvet.rangebar.RangeBar xmlns:custom="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/choose_location_radius_seekbar"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:layout_gravity="bottom|end"
+                    custom:pinMaxFont="14dp"
+                    custom:pinPadding="4dp"
+                    custom:pinRadius="24dp"
+                    custom:rangeBar="false"
+                    custom:tickColor="@color/transparent"
+                    custom:tickEnd="5000"
+                    custom:tickInterval="50"
+                    custom:tickStart="0" />
+
+            </LinearLayout>
 
 
-        </FrameLayout>
+
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -54,7 +54,7 @@
     <string name="geofence_transition_exited">Exited</string>
     <string name="unknown_geofence_transition">Unknown Transition</string>
 
-    <string name="geofence_transition_notification_text">Click notification to return to app</string>
+    <string name="geofence_transition_notification_text">You reached your destination</string>
     <string name="empty_alarm_list_message">Alarm list is empty. \n Click + button to add new alarm.</string>
     <string name="ok">OK</string>
     <string name="location_not_found_message">Location not found. Please set location before saving the alarm</string>

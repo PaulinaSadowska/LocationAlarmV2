@@ -1,60 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
 
 
-    <CheckBox
-        android:id="@+id/repeat_days_every"
-        style="@style/repeatCheckboxStyle"
-        android:text="@string/day_every" />
+        <CheckBox
+            android:id="@+id/repeat_days_every"
+            style="@style/repeatCheckboxStyle"
+            android:text="@string/day_every" />
 
-    <CheckBox
-        android:id="@+id/repeat_days_monday"
-        style="@style/repeatCheckboxStyle"
-        android:text="@string/day_monday" />
+        <CheckBox
+            android:id="@+id/repeat_days_monday"
+            style="@style/repeatCheckboxStyle"
+            android:text="@string/day_monday" />
 
-    <CheckBox
-        android:id="@+id/repeat_days_tuesday"
-        style="@style/repeatCheckboxStyle"
-        android:text="@string/day_tuesday" />
+        <CheckBox
+            android:id="@+id/repeat_days_tuesday"
+            style="@style/repeatCheckboxStyle"
+            android:text="@string/day_tuesday" />
 
-    <CheckBox
-        android:id="@+id/repeat_days_wednesday"
-        style="@style/repeatCheckboxStyle"
-        android:text="@string/day_wednesday" />
+        <CheckBox
+            android:id="@+id/repeat_days_wednesday"
+            style="@style/repeatCheckboxStyle"
+            android:text="@string/day_wednesday" />
 
-    <CheckBox
-        android:id="@+id/repeat_days_thursday"
-        style="@style/repeatCheckboxStyle"
-        android:text="@string/day_thursday" />
+        <CheckBox
+            android:id="@+id/repeat_days_thursday"
+            style="@style/repeatCheckboxStyle"
+            android:text="@string/day_thursday" />
 
-    <CheckBox
-        android:id="@+id/repeat_days_friday"
-        style="@style/repeatCheckboxStyle"
-        android:text="@string/day_friday" />
+        <CheckBox
+            android:id="@+id/repeat_days_friday"
+            style="@style/repeatCheckboxStyle"
+            android:text="@string/day_friday" />
 
-    <CheckBox
-        android:id="@+id/repeat_days_saturday"
-        style="@style/repeatCheckboxStyle"
-        android:text="@string/day_saturday"  />
+        <CheckBox
+            android:id="@+id/repeat_days_saturday"
+            style="@style/repeatCheckboxStyle"
+            android:text="@string/day_saturday" />
 
-    <CheckBox
-        android:id="@+id/repeat_days_sunday"
-        style="@style/repeatCheckboxStyle"
-        android:text="@string/day_sunday" />
+        <CheckBox
+            android:id="@+id/repeat_days_sunday"
+            style="@style/repeatCheckboxStyle"
+            android:text="@string/day_sunday" />
 
 
-    <Button
-        android:id="@+id/repeat_days_save_button"
-        style="@style/Base.Widget.AppCompat.Button.Borderless"
-        android:textColor="@color/colorAccent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:padding="10dp"
-        android:text="SAVE"/>
+        <Button
+            android:id="@+id/repeat_days_save_button"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="10dp"
+            android:text="SAVE"
+            android:textColor="@color/colorAccent" />
 
-</LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
