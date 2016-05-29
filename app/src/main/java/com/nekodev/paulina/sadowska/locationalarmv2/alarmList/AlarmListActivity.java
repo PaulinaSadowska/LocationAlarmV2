@@ -150,7 +150,7 @@ public class AlarmListActivity extends ActionBarActivity implements
         // The INITIAL_TRIGGER_ENTER flag indicates that geofencing service should trigger a
         // GEOFENCE_TRANSITION_ENTER notification when the geofence is added and if the device
         // is already inside that geofence.
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL);
 
         // Add the geofences to be monitored by geofencing service.
         builder.addGeofences(mGeofenceList);
@@ -285,7 +285,8 @@ public class AlarmListActivity extends ActionBarActivity implements
 
                         // Set the transition types of interest. Alerts are only generated for these
                         // transition. We track entry and exit transitions in this sample.
-                        .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                        .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL)
+                        .setLoiteringDelay(Constants.GEOFENCE_LOITERING_DELAY)
 
                         // Create the geofence.
                         .build());

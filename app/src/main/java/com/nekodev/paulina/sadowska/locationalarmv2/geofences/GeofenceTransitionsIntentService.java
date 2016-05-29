@@ -85,7 +85,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
         // Test that the reported transition was of interest.
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
+        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL) {
             DataManager manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
             // Get the geofences that were triggered. A single event can trigger multiple geofences.
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
@@ -127,7 +127,9 @@ public class GeofenceTransitionsIntentService extends IntentService {
         i.setClassName("com.nekodev.paulina.sadowska.locationalarmv2", "com.nekodev.paulina.sadowska.locationalarmv2.AlarmActivity");
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.putExtra(Keys.AlarmDetailsKeys.ALARM_LOCATION_ADDRESS, alarm.getAddress());
-        i.putExtra(Keys.AlarmDetailsKeys.ALARM_TONE_ADDRESS, alarm.getAlarmToneAddress());
+        if(!alarm.getAlarmTone().contains("known") && alarm.getAddress() != null) {
+            i.putExtra(Keys.AlarmDetailsKeys.ALARM_TONE_ADDRESS, alarm.getAlarmToneAddress());
+        }
         getApplicationContext().startActivity(i);
     }
 

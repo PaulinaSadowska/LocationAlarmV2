@@ -84,12 +84,6 @@ public class AlarmDetailsFragment extends Fragment {
             @Override
             public void onSpinnerSelectionChanged(int position) {
                 alarmType = position;
-                if(position==Constants.ALARM_TYPE_SOUND_CODE) {
-                    alarmSoundUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
-                }
-                else{
-                    alarmSoundUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_NOTIFICATION);
-                }
                 Ringtone defaultRingtone = RingtoneManager.getRingtone(getActivity(), alarmSoundUri);
                 alarmSound = defaultRingtone.getTitle(getActivity());
                 alarmSoundFragment.setOptionText(alarmSound);

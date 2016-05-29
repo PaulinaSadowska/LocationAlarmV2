@@ -108,7 +108,7 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
                 .findFragmentById(R.id.choose_location_map);
         autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.choose_location_place_autocomplete_fragment);
-        if(placeAddress.isEmpty()) {
+        if(placeAddress == null) {
             placeAddress = getPlaceAddress(pinLocalization);
         }
         if (!placeAddress.isEmpty())
