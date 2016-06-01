@@ -1,7 +1,11 @@
 package com.nekodev.paulina.sadowska.locationalarmv2.data;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Paulina Sadowska on 12.03.16.
@@ -18,6 +22,8 @@ public class AlarmDataItem {
     private String alarmTone;
     private String alarmToneAddress;
     private boolean[] repeatDays;
+
+    private long lastActionTime = 0;
 
     public AlarmDataItem(int alarmId) {
 
@@ -110,6 +116,16 @@ public class AlarmDataItem {
                 repeatDaysCount++;
         }
         return repeatDaysCount;
+    }
+
+    public boolean shouldBeTriggered(){
+        boolean shouldBeTriggered = true;
+        Date now = Calendar.getInstance().getTime();
+        if((now.getTime() - lastActionTime) < Constants.MIN_DALAY_MS){
+            shouldBeTriggered = false;
+        }
+        lastActionTime = now.getTime();
+        return shouldBeTriggered;
     }
 }
 

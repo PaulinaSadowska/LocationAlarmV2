@@ -6,7 +6,7 @@ package com.nekodev.paulina.sadowska.locationalarmv2;
 public class Constants {
 
     public static final String FILE_NAME = "alarms";
-    public static final int UNKNOWN_ID = -1;
+    public final static int MIN_DALAY_MS = 60 * 1000; //1min
 
     public static final int ALARM_TYPE_SOUND_CODE = 0;
     public static final int ALARM_TYPE_NOTIFICATION_CODE = 1;
@@ -16,11 +16,6 @@ public class Constants {
      * stops tracking the geofence.
      */
     public static final long GEOFENCE_EXPIRATION_IN_HOURS = 24 * 356 * 100; //never stops :>
-
-    /**
-     * For this sample, geofences expire after twelve hours.
-     */
     public static final long GEOFENCE_EXPIRATION_IN_MILLISECONDS =
             GEOFENCE_EXPIRATION_IN_HOURS * 60 * 60 * 1000;
-    public static final int GEOFENCE_LOITERING_DELAY = 1000;
 }

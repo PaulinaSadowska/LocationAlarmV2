@@ -49,6 +49,7 @@ import java.util.List;
  */
 public class GeofenceTransitionsIntentService extends IntentService {
 
+
     protected static final String TAG = "GeofenceTransitionsIS";
 
     /**
@@ -74,49 +75,53 @@ public class GeofenceTransitionsIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if (geofencingEvent.hasError()) {
-            String errorMessage = GeofenceErrorMessages.getErrorString(this,
-                    geofencingEvent.getErrorCode());
-            Log.e(TAG, errorMessage);
+            Log.e(TAG, GeofenceErrorMessages.getErrorString(this,
+                    geofencingEvent.getErrorCode()));
             return;
         }
         // Get the transition type.
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
         // Test that the reported transition was of interest.
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL) {
-            DataManager manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
+        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             // Get the geofences that were triggered. A single event can trigger multiple geofences.
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
-            int previousAlarmId = -1;
             for (Geofence triggeringGeofence : triggeringGeofences) {
-                int alarmId = Integer.parseInt(triggeringGeofence.getRequestId());
-                if (previousAlarmId != alarmId) {
-                    AlarmDataItem alarm = manager.get(alarmId);
-                    boolean trigger;
-                    if(alarm.getRepeatDaysCount()==0){
-                        manager.editAlarmIsActive(alarm.getAlarmId(), false);
-                        trigger = true;
-                    }
-                    else {
-                        Calendar today = Calendar.getInstance();
-                        int dayOfWeek = (today.get(Calendar.DAY_OF_WEEK) + 5) % 7;
-                        trigger = alarm.getRepeatDays()[dayOfWeek];
-                    }
-                    if (trigger) {
-                        if (alarm.getAlarmType() == AlarmTypes.NOTIFICATION) {
-                            sendNotification(alarm);
-                        } else {
-                            triggerAlarm(alarm);
-                        }
-                    }
-                    previousAlarmId = alarmId;
-                }
+                triggerAction(triggeringGeofence);
             }
 
             // Send notification and log the transition details.
         } else {
             // Log the error.
             Log.e(TAG, getString(R.string.geofence_transition_invalid_type, geofenceTransition));
+        }
+    }
+
+    private void triggerAction(Geofence triggeringGeofence) {
+        int alarmId = Integer.parseInt(triggeringGeofence.getRequestId());
+        DataManager manager = DataManager.getInstance(getFilesDir().getPath(), Constants.FILE_NAME);
+
+        AlarmDataItem alarm = manager.get(alarmId);
+        boolean trigger;
+
+        if(!alarm.shouldBeTriggered()) {
+            return;
+        }
+
+        if (alarm.getRepeatDaysCount() == 0) {
+            manager.editAlarmIsActive(alarm.getAlarmId(), false);
+            trigger = true;
+        } else {
+            Calendar today = Calendar.getInstance();
+            int dayOfWeek = (today.get(Calendar.DAY_OF_WEEK) + 5) % 7;
+            trigger = alarm.getRepeatDays()[dayOfWeek];
+        }
+        if (trigger) {
+            if (alarm.getAlarmType() == AlarmTypes.NOTIFICATION) {
+                sendNotification(alarm);
+            } else {
+                triggerAlarm(alarm);
+            }
         }
     }
 

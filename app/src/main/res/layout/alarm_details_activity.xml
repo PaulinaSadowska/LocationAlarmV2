@@ -34,11 +34,13 @@
                 android:id="@+id/alarm_details_title"
                 style="@style/AlarmDetailsTitle"
                 android:layout_width="match_parent"
+                android:layout_marginRight="70dp"
+                android:layout_marginEnd="70dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="@dimen/alarm_details_title_bottom_margin"
                 android:layout_marginStart="@dimen/alarm_details_horizontal_margin"
-                tools:text="Góralska 2, Poznań" />
+                tools:text="Góralska 2, 61-299 Poznań, Poland" />
         </FrameLayout>
 
     </android.support.v7.widget.Toolbar>

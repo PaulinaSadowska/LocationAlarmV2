@@ -6,7 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -18,8 +19,6 @@ import butterknife.OnClick;
  */
 public class AlarmActivity extends AppCompatActivity {
 
-    @Bind(R.id.alarm_activity_cancelAlarm)
-    Button cancelAlarm;
     @Bind(R.id.alarm_activity_address)
     TextView address;
 
@@ -31,6 +30,14 @@ public class AlarmActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         address.setText(getIntent().getStringExtra(Keys.AlarmDetailsKeys.ALARM_LOCATION_ADDRESS));
         startAlarmSound(getIntent().getStringExtra(Keys.AlarmDetailsKeys.ALARM_TONE_ADDRESS));
+    }
+
+    public void onAttachedToWindow() {
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
     }
 
     private void startAlarmSound(String alarmSoundAddress) {
