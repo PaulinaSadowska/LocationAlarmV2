@@ -121,7 +121,7 @@ public class AlarmDataItem {
     public boolean shouldBeTriggered(){
         boolean shouldBeTriggered = true;
         Date now = Calendar.getInstance().getTime();
-        if((now.getTime() - lastActionTime) < Constants.MIN_DALAY_MS){
+        if((now.getTime() - lastActionTime) < Constants.MIN_DELAY_MS){
             shouldBeTriggered = false;
         }
         lastActionTime = now.getTime();

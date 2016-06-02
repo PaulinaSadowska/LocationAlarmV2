@@ -6,7 +6,7 @@ package com.nekodev.paulina.sadowska.locationalarmv2;
 public class Constants {
 
     public static final String FILE_NAME = "alarms";
-    public final static int MIN_DALAY_MS = 60 * 1000; //1min
+    public final static long MIN_DELAY_MS = 20 * 1000; //1min
 
     public static final int ALARM_TYPE_SOUND_CODE = 0;
     public static final int ALARM_TYPE_NOTIFICATION_CODE = 1;
