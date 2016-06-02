@@ -83,6 +83,7 @@ public class AlarmDetailsActivity extends AppCompatActivity {
     @OnClick(R.id.alarm_details_save)
     public void saveLocalization(View view) {
         Intent intent = new Intent(this, AlarmListActivity.class);
+        intent.putExtra(Keys.ALARM_ID, alarmData.getAlarmId());
         manager.editAlarmDetails(alarmData.getAlarmId(), alarmDetailsFragment.getAlarmType(),
                 alarmDetailsFragment.getAlarmSound(), alarmDetailsFragment.getAlarmSoundUri(), alarmDetailsFragment.getRepeatDays());
         //save data in manager

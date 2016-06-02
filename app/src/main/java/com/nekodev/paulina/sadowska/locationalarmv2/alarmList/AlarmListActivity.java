@@ -18,6 +18,7 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
+import com.nekodev.paulina.sadowska.locationalarmv2.Keys;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
 import com.nekodev.paulina.sadowska.locationalarmv2.chooseLocation.ChooseLocationActivity;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.AlarmDataItem;
@@ -122,6 +123,9 @@ public class AlarmListActivity extends ActionBarActivity implements
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.i(TAG, "Connected to GoogleApiClient");
+        if(getIntent().hasExtra(Keys.ALARM_ID)){//data changed
+            updateGeofences();
+        }
     }
 
     @Override
@@ -135,7 +139,6 @@ public class AlarmListActivity extends ActionBarActivity implements
     public void onConnectionSuspended(int cause) {
         // The connection to Google Play services was lost for some reason.
         Log.i(TAG, "Connection suspended");
-
         // onConnected() will be called again automatically when the service reconnects
     }
 
