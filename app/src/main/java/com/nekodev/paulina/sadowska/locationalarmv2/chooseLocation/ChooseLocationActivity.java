@@ -125,17 +125,25 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
             public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex,
                                               int rightPinIndex,
                                               String leftPinValue, String rightPinValue) {
-                radius = Integer.parseInt(rightPinValue);
+                radius = getExponentialPinValue(rightPinValue);
                 updateMap(false);
             }
         });
         radiusSeekbar.setFormatter(new IRangeBarFormatter() {
             @Override
             public String format(String s) {
+                int pinValue = getExponentialPinValue(s);
                 // Transform the String s here then return s
-                return s + getString(R.string.radius_unit_label);
+                return pinValue + getString(R.string.radius_unit_label);
             }
         });
+    }
+
+    private int getExponentialPinValue(String pinValueStr){
+        int pinValue = Integer.parseInt(pinValueStr);
+        Double valueNormalised = pinValue/1000.0;
+        Double pinValue2 = Math.exp(valueNormalised-5.0) * 5000.0;
+        return pinValue2.intValue();
     }
 
     @Override

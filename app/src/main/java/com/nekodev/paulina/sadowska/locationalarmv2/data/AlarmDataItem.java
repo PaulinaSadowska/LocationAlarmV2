@@ -2,6 +2,7 @@ package com.nekodev.paulina.sadowska.locationalarmv2.data;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
+import com.nekodev.paulina.sadowska.locationalarmv2.Utilities;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmTypes;
 
 import java.util.Calendar;
@@ -61,7 +62,7 @@ public class AlarmDataItem {
     }
 
     public double getRadiusInKilometers() {
-        return radiusInMeters / 1000.0;
+        return Utilities.round(radiusInMeters / 1000.0, 1);
     }
 
     public String getAlarmTone() {

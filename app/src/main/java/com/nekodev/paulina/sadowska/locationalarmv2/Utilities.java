@@ -2,6 +2,9 @@ package com.nekodev.paulina.sadowska.locationalarmv2;
 
 import android.content.res.Resources;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * Created by Paulina Sadowska on 28.03.16.
  */
@@ -39,6 +42,14 @@ public class Utilities {
             }
             return result;
         }
+    }
+
+   public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
 
