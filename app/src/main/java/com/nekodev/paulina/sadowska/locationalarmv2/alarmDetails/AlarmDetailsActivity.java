@@ -1,11 +1,13 @@
 package com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -96,10 +98,23 @@ public class AlarmDetailsActivity extends AppCompatActivity {
     }
 
     private void cancelLocalization(){
-        Intent intent = new Intent(this, AlarmListActivity.class);
-        if(isNewAlarm)
-            manager.remove(alarmData.getAlarmId());
-        startActivity(intent);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.discard_changes)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(getApplicationContext(), AlarmListActivity.class);
+                        if(isNewAlarm) {
+                            manager.remove(alarmData.getAlarmId());
+                        }
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.create().show();
     }
 
     @Override
