@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appyvet.rangebar.IRangeBarFormatter;
 import com.appyvet.rangebar.RangeBar;
@@ -42,6 +43,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
 import com.nekodev.paulina.sadowska.locationalarmv2.Keys;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
+import com.nekodev.paulina.sadowska.locationalarmv2.Utilities;
 import com.nekodev.paulina.sadowska.locationalarmv2.alarmDetails.AlarmDetailsActivity;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.AlarmDataItem;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.DataManager;
@@ -64,7 +66,7 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
     private static final int STROKE_COLOR = Color.argb(200, 0, 0, 0);
     private LatLng pinLocalization = new LatLng(52.4034891, 16.946969); //assigned when phone localization not found
     private String placeAddress;
-    private int radius = 1000;
+    private int radius = 400;
     private GoogleMap mMap;
     private PlaceAutocompleteFragment autocompleteFragment;
     private GoogleApiClient mGoogleApiClient;
@@ -99,7 +101,8 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
                 alarmId = -1;
             }
         }
-
+        Utilities.checkPermission(this, Manifest.permission.ACCESS_FINE_LOCATION, Constants.permissionRequestIds.FINE_LOCATION);
+        Utilities.checkPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Constants.permissionRequestIds.WRITE_EXTERNAL_STORAGE);
         Resources res = getResources();
         saveButton.setText(res.getString(R.string.save));
         cancelButton.setText(res.getString(R.string.cancel));
@@ -139,11 +142,27 @@ public class ChooseLocationActivity extends FragmentActivity implements OnMapRea
         });
     }
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        // If request is cancelled, the result arrays are empty.
+        if (grantResults.length > 0
+                && !(grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+            Toast.makeText(this, "Without granting all permissions the app may not work properly. Please consider granting this permission in settings", Toast.LENGTH_LONG).show();
+        }
+    }
+
     private int getExponentialPinValue(String pinValueStr){
         int pinValue = Integer.parseInt(pinValueStr);
         Double valueNormalised = pinValue/1000.0;
         Double pinValue2 = Math.exp(valueNormalised-5.0) * 5000.0;
         return pinValue2.intValue();
+    }
+
+    private int getPinValue(int radius){
+        Double pinValue =  0.2 * Math.log(radius) + 5.0;
+        return pinValue.intValue();
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.nekodev.paulina.sadowska.locationalarmv2.alarmList;
 
+import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
@@ -20,6 +22,7 @@ import com.google.android.gms.location.LocationServices;
 import com.nekodev.paulina.sadowska.locationalarmv2.Constants;
 import com.nekodev.paulina.sadowska.locationalarmv2.Keys;
 import com.nekodev.paulina.sadowska.locationalarmv2.R;
+import com.nekodev.paulina.sadowska.locationalarmv2.Utilities;
 import com.nekodev.paulina.sadowska.locationalarmv2.chooseLocation.ChooseLocationActivity;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.AlarmDataItem;
 import com.nekodev.paulina.sadowska.locationalarmv2.data.DataManager;
@@ -67,6 +70,9 @@ public class AlarmListActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_alarm_list);
         ButterKnife.bind(this);
 
+        Utilities.checkPermission(this, Manifest.permission.ACCESS_FINE_LOCATION, Constants.permissionRequestIds.FINE_LOCATION);
+        Utilities.checkPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Constants.permissionRequestIds.WRITE_EXTERNAL_STORAGE);
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.alarm_list_fragment, alarmListFragment);
         transaction.commit();
@@ -88,6 +94,16 @@ public class AlarmListActivity extends ActionBarActivity implements
 
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && !(grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    Toast.makeText(this, "Without granting all permissions the app may not work properly. Please consider granting this permission in settings", Toast.LENGTH_LONG).show();
+                }
     }
 
 

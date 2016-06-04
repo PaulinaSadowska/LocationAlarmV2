@@ -92,8 +92,12 @@ public class AlarmDetailsFragment extends Fragment {
         if(alarmSound==null) {
             Uri defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
             Ringtone defaultRingtone = RingtoneManager.getRingtone(getActivity(), defaultRingtoneUri);
-            alarmSound = defaultRingtone.getTitle(getActivity());
-
+            if(defaultRingtone != null){
+                alarmSound = defaultRingtone.getTitle(getActivity());
+            }
+            else{
+                alarmSound = "Unknown ringtone";
+            }
         }
         alarmSoundFragment.setArguments(getAlarmArg(res.getString(R.string.alarm_tone), alarmSound));
         alarmSoundFragment.setOnItemClickedListener(new AlarmDetailsItem.ItemClickedListener() {

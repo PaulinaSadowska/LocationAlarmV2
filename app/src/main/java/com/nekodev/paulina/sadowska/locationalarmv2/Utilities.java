@@ -1,6 +1,10 @@
 package com.nekodev.paulina.sadowska.locationalarmv2;
 
+import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -52,5 +56,13 @@ public class Utilities {
         return bd.doubleValue();
     }
 
+    public static void checkPermission(Activity activity, String permissionCode, int requestId) {//
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(activity, permissionCode) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{permissionCode},
+                    requestId);
+        }
+    }
 
 }
